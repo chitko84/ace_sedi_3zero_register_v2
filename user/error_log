@@ -1,0 +1,534 @@
+[28-Oct-2025 16:05:56 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php:201
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php(201): mysqli_stmt->bind_param('isssssssssss', 56, 'CKK', 'AIU24102180', 'Bachelor of Bus...', 'Austria', '01234567', 'chitko.ko@stude...', 'School Of Educa...', 'October 2025 / ...', 'March 2028', 'Year 2 Sem 1')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 201
+[07-Nov-2025 11:25:11 UTC] PHP Parse error:  Unmatched '}' in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 290
+[07-Nov-2025 11:25:13 UTC] PHP Parse error:  Unmatched '}' in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 290
+[07-Nov-2025 11:43:39 UTC] PHP Parse error:  Unmatched '}' in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 290
+[07-Nov-2025 13:17:50 UTC] PHP Fatal error:  Uncaught ArgumentCountError: The number of elements in the type definition string must match the number of bind variables in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php:266
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php(266): mysqli_stmt->bind_param('ssssssssisssii', 'Dwayne Jackson', 'AIU123', 'Bachelor of Bus...', 'Bahamas', '01234567', 'djackson@gmail....', 'School Of Busin...', 'October 2027 / ...', 2030, 'Year 1 Sem 3', 'key_person', 84, 64)
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 266
+[07-Nov-2025 13:24:26 UTC] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 cannot be passed by reference in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php:123
+Stack trace:
+#0 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 123
+[07-Nov-2025 16:44:18 UTC] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 cannot be passed by reference in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php:157
+Stack trace:
+#0 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 157
+[07-Nov-2025 17:01:21 UTC] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 cannot be passed by reference in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php:157
+Stack trace:
+#0 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 157
+[07-Nov-2025 17:01:59 UTC] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 cannot be passed by reference in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php:157
+Stack trace:
+#0 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 157
+[07-Nov-2025 17:03:02 UTC] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 cannot be passed by reference in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php:157
+Stack trace:
+#0 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 157
+[07-Nov-2025 17:06:51 UTC] PHP Fatal error:  Uncaught Error: mysqli_stmt::bind_param(): Argument #2 cannot be passed by reference in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php:157
+Stack trace:
+#0 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 157
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:11:40 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:11:43 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:11:44 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:11:54 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:12:21 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:12:35 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 462
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 470
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 509
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  foreach() argument must be of type array|object, null given in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 517
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $programmeOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 558
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $countries in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 559
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $currentSemesterOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 566
+[07-Nov-2025 17:13:26 UTC] PHP Warning:  Undefined variable $graduationOptions in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/edit_club.php on line 567
+[11-Nov-2025 10:22:46 UTC] Email sending failed for john.doe@example.com: SMTP Error: The following recipients failed: john.doe@example.com: The mail server could not deliver mail to john.doe@example.com.  The
+account or domain may not exist, they may be blacklisted, or missing the
+proper dns entries.
+
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_HOST" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 49
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_USER" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 51
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_PASS" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 52
+[11-Nov-2025 10:34:33 UTC] Email sending failed for chitko.ko@student.aiu.edu.my: SMTP Error: Could not connect to SMTP host. Failed to connect to server SMTP server error: Failed to connect to server
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_HOST" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 49
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_USER" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 51
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_PASS" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 52
+[11-Nov-2025 10:34:33 UTC] Email sending failed for djackson@gmail.com: SMTP Error: Could not connect to SMTP host. Failed to connect to server SMTP server error: Failed to connect to server
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_HOST" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 49
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_USER" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 51
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_PASS" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 52
+[11-Nov-2025 10:34:33 UTC] Email sending failed for jonjones@gmail.com: SMTP Error: Could not connect to SMTP host. Failed to connect to server SMTP server error: Failed to connect to server
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_HOST" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 49
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_USER" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 51
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_PASS" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 52
+[11-Nov-2025 10:34:33 UTC] Email sending failed for ali.raza@example.com: SMTP Error: Could not connect to SMTP host. Failed to connect to server SMTP server error: Failed to connect to server
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_HOST" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 49
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_USER" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 51
+[11-Nov-2025 10:34:33 UTC] PHP Warning:  Undefined array key "SMTP_PASS" in /home/acesediaiuedu/public_html/3zeroclub_registration_system/user/club_registration.php on line 52
+[11-Nov-2025 10:34:33 UTC] Email sending failed for ckk@email.com: SMTP Error: Could not connect to SMTP host. Failed to connect to server SMTP server error: Failed to connect to server
+[11-Nov-2025 10:50:03 UTC] Email sending failed for john.doe@example.com: SMTP Error: The following recipients failed: john.doe@example.com: The mail server could not deliver mail to john.doe@example.com.  The
+account or domain may not exist, they may be blacklisted, or missing the
+proper dns entries.
+
+[11-Nov-2025 10:50:03 UTC] Email sending failed for ali.raza@example.com: SMTP Error: The following recipients failed: ali.raza@example.com: The mail server could not deliver mail to ali.raza@example.com.  The
+account or domain may not exist, they may be blacklisted, or missing the
+proper dns entries.
+
+[11-Nov-2025 10:50:03 UTC] Club registration email errors: Failed to send email to Member: john.doe@example.com; Failed to send email to Member: ali.raza@example.com
+[11-Nov-2025 11:01:48 UTC] Event notification email failed for john.doe@example.com: SMTP Error: The following recipients failed: john.doe@example.com: The mail server could not deliver mail to john.doe@example.com.  The
+account or domain may not exist, they may be blacklisted, or missing the
+proper dns entries.
+
+[11-Nov-2025 11:01:48 UTC] Event notification email errors for event 24: Failed to send notification to: john.doe@example.com
+[11-Nov-2025 12:28:54 UTC] Event notification email failed for john.doe@example.com: SMTP Error: The following recipients failed: john.doe@example.com: The mail server could not deliver mail to john.doe@example.com.  The
+account or domain may not exist, they may be blacklisted, or missing the
+proper dns entries.
+
+[11-Nov-2025 12:28:59 UTC] Event notification email failed for ali.raza@example.com: SMTP Error: The following recipients failed: ali.raza@example.com: The mail server could not deliver mail to ali.raza@example.com.  The
+account or domain may not exist, they may be blacklisted, or missing the
+proper dns entries.
+
+[11-Nov-2025 12:28:59 UTC] Event notification email errors for event 25: Failed to send notification to: john.doe@example.com; Failed to send notification to: ali.raza@example.com
+[11-Nov-2025 12:32:37 UTC] Event notification email failed for john.doe@example.com: SMTP Error: The following recipients failed: john.doe@example.com: The mail server could not deliver mail to john.doe@example.com.  The
+account or domain may not exist, they may be blacklisted, or missing the
+proper dns entries.
+
+[11-Nov-2025 12:32:37 UTC] Event notification email errors for event 26: Failed to send notification to: john.doe@example.com
+[12-Nov-2025 19:03:25 UTC] Email sending failed for ali.raza@example.com: SMTP Error: The following recipients failed: ali.raza@example.com: The mail server could not deliver mail to ali.raza@example.com.  The
+account or domain may not exist, they may be blacklisted, or missing the
+proper dns entries.
+
+[12-Nov-2025 19:03:26 UTC] Club registration email errors: Failed to send email to Member: ali.raza@example.com

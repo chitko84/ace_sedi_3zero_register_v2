@@ -1,0 +1,52 @@
+[28-Oct-2025 16:51:40 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/header.php:95) in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 5
+[28-Oct-2025 16:51:40 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Referencing column 'admin_id' and referenced column 'id' in foreign key constraint 'event_approval_logs_ibfk_2' are incompatible. in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php:49
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php(49): mysqli->query('CREATE TABLE IF...')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 49
+[28-Oct-2025 17:00:22 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/header.php:95) in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 5
+[28-Oct-2025 17:00:22 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Referencing column 'admin_id' and referenced column 'id' in foreign key constraint 'event_approval_logs_ibfk_2' are incompatible. in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php:49
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php(49): mysqli->query('CREATE TABLE IF...')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 49
+[06-Nov-2025 10:16:31 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/header.php:95) in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 5
+[06-Nov-2025 10:16:31 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Referencing column 'admin_id' and referenced column 'id' in foreign key constraint 'event_approval_logs_ibfk_2' are incompatible. in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php:49
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php(49): mysqli->query('CREATE TABLE IF...')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 49
+[06-Nov-2025 10:16:48 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/header.php:95) in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 5
+[06-Nov-2025 10:16:48 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Referencing column 'admin_id' and referenced column 'id' in foreign key constraint 'event_approval_logs_ibfk_2' are incompatible. in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php:49
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php(49): mysqli->query('CREATE TABLE IF...')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 49
+[06-Nov-2025 10:19:00 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/header.php:95) in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 5
+[06-Nov-2025 10:19:00 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Referencing column 'admin_id' and referenced column 'id' in foreign key constraint 'event_approval_logs_ibfk_2' are incompatible. in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php:49
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php(49): mysqli->query('CREATE TABLE IF...')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 49
+[06-Nov-2025 10:22:08 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/header.php:95) in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 5
+[06-Nov-2025 10:22:08 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Referencing column 'admin_id' and referenced column 'id' in foreign key constraint 'event_approval_logs_ibfk_2' are incompatible. in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php:49
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php(49): mysqli->query('CREATE TABLE IF...')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 49
+[06-Nov-2025 10:25:22 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Referencing column 'admin_id' and referenced column 'id' in foreign key constraint 'event_approval_logs_ibfk_2' are incompatible. in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php:86
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php(86): mysqli->query('CREATE TABLE IF...')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 86
+[06-Nov-2025 10:25:34 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Referencing column 'admin_id' and referenced column 'id' in foreign key constraint 'event_approval_logs_ibfk_2' are incompatible. in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php:86
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php(86): mysqli->query('CREATE TABLE IF...')
+#1 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/update_event_approval.php on line 86
+[12-Nov-2025 19:28:37 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'acesediaiuedu_3zero_club.email_logs' doesn't exist in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/edit_club.php:97
+Stack trace:
+#0 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/edit_club.php(97): mysqli->prepare('INSERT INTO ema...')
+#1 /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/edit_club.php(299): sendClubStatusEmail('TestClub2', 'approved', Array, Object(mysqli))
+#2 {main}
+  thrown in /home/acesediaiuedu/public_html/3zeroclub_registration_system/admin/edit_club.php on line 97
