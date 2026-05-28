@@ -126,6 +126,15 @@ function normalize_programme($programme) {
         return 'Unknown';
     }
 
+    if (strpos($p, 'master of computing') !== false) {
+        return 'Master of Computing (by Research)';
+    }
+
+    if (strpos($p, 'doctor of philosophy in computer science') !== false ||
+        (strpos($p, 'phd') !== false && strpos($p, 'computer science') !== false)) {
+        return 'Doctor of Philosophy in Computer Science';
+    }
+
     if ($p === 'bba' ||
         strpos($p, 'business administration') !== false ||
         strpos($p, 'bachelor in business admin') !== false ||

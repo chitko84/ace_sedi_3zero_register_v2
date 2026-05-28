@@ -127,8 +127,11 @@ $createdAt  = $achievement['created_at']  ? date('M j, Y g:i A', strtotime($achi
                 <a href="edit_achievement.php?id=<?= (int)$achievement['id'] ?>" class="btn btn-primary">
                     <i class="fa-solid fa-pen me-1"></i> Edit
                 </a>
-                <a href="delete_achievement.php?id=<?= (int)$achievement['id'] ?>" class="btn btn-outline-danger"
-                   onclick="return confirm('Delete this achievement? This action cannot be undone.');">
+                <a href="delete_achievement.php?id=<?= (int)$achievement['id'] ?>" class="btn btn-outline-danger js-delete-confirm"
+                   data-delete-title="Delete Achievement"
+                   data-delete-message="Delete this achievement?"
+                   data-delete-item="<?= h($achievement['title'] ?? ('Achievement #' . (int)$achievement['id'])) ?>"
+                   data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete Achievement">
                     <i class="fa-solid fa-trash me-1"></i> Delete
                 </a>
                 <a href="manage_achievements.php" class="btn btn-light">

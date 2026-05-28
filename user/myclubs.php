@@ -295,8 +295,11 @@ if (isset($_GET['delete_club']) && $user_email !== '') {
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
-                                                <a class="dropdown-item text-danger" href="#" 
-                                                   onclick="confirmDelete(<?= (int)$club['id'] ?>, '<?= htmlspecialchars($club['group_name'], ENT_QUOTES) ?>')">
+                                                <a class="dropdown-item text-danger js-delete-confirm" href="myclubs.php?delete_club=<?= (int)$club['id'] ?>"
+                                                   data-delete-title="Delete Club"
+                                                   data-delete-message="Are you sure you want to delete this club?"
+                                                   data-delete-item="<?= htmlspecialchars($club['group_name'], ENT_QUOTES) ?>"
+                                                   data-delete-confirm-label="<i class='fas fa-trash me-1'></i> Delete Club">
                                                     <i class="fas fa-trash me-2"></i>Delete Club
                                                 </a>
                                             </li>
@@ -459,13 +462,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (sortFilter) sortFilter.value = 'newest';
         filterClubs();
     });
-
-    // Delete confirmation function
-    window.confirmDelete = function(clubId, clubName) {
-        if (confirm(`Are you sure you want to delete the club "${clubName}"? This action cannot be undone.`)) {
-            window.location.href = `myclubs.php?delete_club=${clubId}`;
-        }
-    };
 
     // Fix for dropdown menus - prevent them from closing when clicking inside
     document.querySelectorAll('.dropdown-menu').forEach(function(dropdown) {

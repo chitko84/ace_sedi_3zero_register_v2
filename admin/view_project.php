@@ -217,8 +217,11 @@ $updatedAt = $project['updated_at'] ? date('M j, Y g:i A', strtotime($project['u
         </div>
         <div class="col-12 col-lg-4 text-lg-end">
             <div class="btn-group">
-                <a href="delete_project.php?id=<?= (int)$project['id'] ?>" class="btn btn-outline-danger"
-                   onclick="return confirm('Delete this project? This action cannot be undone.');">
+                <a href="delete_project.php?id=<?= (int)$project['id'] ?>" class="btn btn-outline-danger js-delete-confirm"
+                   data-delete-title="Delete Project"
+                   data-delete-message="Delete this project?"
+                   data-delete-item="<?= h($project['project_name'] ?? ('Project #' . (int)$project['id'])) ?>"
+                   data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete Project">
                     <i class="fa-solid fa-trash me-1"></i> Delete
                 </a>
                 <a href="manage_projects.php" class="btn btn-light">

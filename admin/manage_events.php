@@ -565,8 +565,11 @@ function approvalBadgeClass($s){
                                             <?php endif; ?>
                                             
                                             <!-- Delete Button -->
-                                            <a href="delete_event.php?id=<?= (int)$r['id'] ?>" class="btn btn-sm btn-outline-danger" title="Delete"
-                                               onclick="return confirm('Are you sure you want to delete this event? This action cannot be undone.');">
+                                            <a href="delete_event.php?id=<?= (int)$r['id'] ?>" class="btn btn-sm btn-outline-danger js-delete-confirm" title="Delete"
+                                               data-delete-title="Delete Event"
+                                               data-delete-message="Are you sure you want to delete this event?"
+                                               data-delete-item="<?= h($r['title'] ?? ('Event #' . (int)$r['id'])) ?>"
+                                               data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete Event">
                                                 <i class="fa-solid fa-trash"></i>
                                                 <span class="d-none d-md-inline ms-1">Delete</span>
                                             </a>

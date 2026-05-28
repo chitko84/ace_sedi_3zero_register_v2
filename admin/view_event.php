@@ -108,8 +108,11 @@ $createdAt = $event['created_at'] ? date('M j, Y g:i A', strtotime($event['creat
             </nav>
             <div class="d-flex gap-2">
                 <a href="manage_events.php" class="btn btn-light"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
-                <a href="delete_event.php?id=<?= (int)$event['id'] ?>" class="btn btn-outline-danger"
-                   onclick="return confirm('Delete this event? This action cannot be undone.');">
+                <a href="delete_event.php?id=<?= (int)$event['id'] ?>" class="btn btn-outline-danger js-delete-confirm"
+                   data-delete-title="Delete Event"
+                   data-delete-message="Delete this event?"
+                   data-delete-item="<?= h($event['title'] ?? ('Event #' . (int)$event['id'])) ?>"
+                   data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete Event">
                     <i class="fa-solid fa-trash me-1"></i> Delete
                 </a>
             </div>

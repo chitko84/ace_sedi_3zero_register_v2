@@ -615,7 +615,10 @@ foreach ($events as $e) {
                         <img src="<?= htmlspecialchars($p['file_path']) ?>" alt="Event photo">
                       </a>
                       <?php if ($e['created_by'] == $user_id): ?>
-                        <form method="POST" class="d-inline" onsubmit="return confirm('Delete this photo?')">
+                        <form method="POST" class="d-inline js-delete-confirm"
+                              data-delete-title="Delete Photo"
+                              data-delete-message="Are you sure you want to delete this photo?"
+                              data-delete-confirm-label="<i class='bi bi-trash me-1'></i> Delete Photo">
                           <input type="hidden" name="photo_id" value="<?= $p['id'] ?>">
                           <button type="submit" name="delete_photo" class="photo-delete" title="Delete photo">
                             <i class="bi bi-x"></i>
@@ -1041,17 +1044,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
-
-// Photo delete confirmation enhancement
-document.querySelectorAll('form[onsubmit*="confirm"]').forEach(form => {
-    form.onsubmit = function(e) {
-        if (!confirm('Are you sure you want to delete this photo? This action cannot be undone.')) {
-            e.preventDefault();
-            return false;
-        }
-        return true;
-    };
 });
 
 // Keyboard navigation improvements

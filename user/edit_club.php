@@ -60,6 +60,8 @@ $programmeOptions = [
     "Doctor of Philosophy (Education)",
     "Bachelor in Computer Science (Honours)",
     "Bachelor in Data Science (Honours)",
+    "Master of Computing (by Research)",
+    "Doctor of Philosophy in Computer Science",
     "Foundation in Computing",
     "Foundation in Arts",
 ];

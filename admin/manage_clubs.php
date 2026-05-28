@@ -753,8 +753,8 @@ $focusFallbackNotice = $hasFocusArea
                                     <a href="edit_club.php?id=<?= (int)$r['id'] ?>" class="btn btn-sm btn-outline-primary" title="Edit" aria-label="Edit club">
                                         <i class="fa-solid fa-pen"></i>
                                     </a>
-                                    <a href="delete_club.php?id=<?= (int)$r['id'] ?>" class="btn btn-sm btn-outline-danger" title="Delete" aria-label="Delete club"
-                                       onclick="return confirm('Delete this club? This action cannot be undone.');">
+                                    <a href="delete_club.php?id=<?= (int)$r['id'] ?>" class="btn btn-sm btn-outline-danger js-delete-club"
+                                       title="Delete" aria-label="Delete club" data-club-name="<?= h(cleanLabel($r['group_name'] ?? '')) ?>">
                                         <i class="fa-solid fa-trash"></i>
                                     </a>
                                 </div>
@@ -799,5 +799,47 @@ $focusFallbackNotice = $hasFocusArea
         </div>
     </div>
 </main>
+
+<div class="modal fade" id="deleteClubModal" tabindex="-1" aria-labelledby="deleteClubModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteClubModalLabel">Delete Club</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-2">Are you sure you want to delete this club?</p>
+                <p class="fw-semibold mb-0" id="deleteClubName"></p>
+                <p class="text-muted small mt-3 mb-0">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" class="btn btn-danger" id="confirmDeleteClubBtn">
+                    <i class="fa-solid fa-trash me-1"></i> Delete
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modalEl = document.getElementById('deleteClubModal');
+    const confirmBtn = document.getElementById('confirmDeleteClubBtn');
+    const clubNameEl = document.getElementById('deleteClubName');
+    if (!modalEl || !confirmBtn || !clubNameEl) return;
+
+    const deleteModal = new bootstrap.Modal(modalEl);
+
+    document.querySelectorAll('.js-delete-club').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            confirmBtn.href = link.href;
+            clubNameEl.textContent = link.dataset.clubName || 'Selected club';
+            deleteModal.show();
+        });
+    });
+});
+</script>
 
 <?php require_once __DIR__ . '/footer.php'; ?>

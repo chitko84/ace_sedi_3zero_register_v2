@@ -135,6 +135,8 @@ $programmeOptions = [
     "Doctor of Philosophy (Education)",
     "Bachelor in Computer Science (Honours)",
     "Bachelor in Data Science (Honours)",
+    "Master of Computing (by Research)",
+    "Doctor of Philosophy in Computer Science",
     "Foundation in Computing",
     "Foundation in Arts",
 ];
@@ -839,7 +841,11 @@ function sel($a,$b){ return $a===$b ? 'selected' : ''; }
                                                             <div><strong>Phone:</strong> <?= h($member['phone']) ?></div>
                                                             <div><strong>Graduation:</strong> <?= h($member['expected_graduation_year']) ?></div>
                                                         </div>
-                                                        <form method="post" class="mt-2" onsubmit="return confirm('Are you sure you want to remove <?= h($member['full_name']) ?> from this club?');">
+                                                        <form method="post" class="mt-2 js-delete-confirm"
+                                                              data-delete-title="Remove Member"
+                                                              data-delete-message="Are you sure you want to remove this member from this club?"
+                                                              data-delete-item="<?= h($member['full_name']) ?>"
+                                                              data-delete-confirm-label="<i class='fa-solid fa-user-minus me-1'></i> Remove Member">
                                                             <input type="hidden" name="csrf_token" value="<?= h($csrf_token) ?>">
                                                             <input type="hidden" name="member_id" value="<?= (int)$member['id'] ?>">
                                                             <input type="hidden" name="remove_member" value="1">

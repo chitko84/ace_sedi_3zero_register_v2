@@ -298,9 +298,12 @@ function apprClass($s){ return $s==='approved'?'success':($s==='rejected'?'dange
                                 
                                 <!-- Delete Button -->
                                 <a href="delete_achievement.php?id=<?= (int)$r['id'] ?>" 
-                                   class="btn btn-sm btn-outline-danger" 
+                                   class="btn btn-sm btn-outline-danger js-delete-confirm" 
                                    title="Delete"
-                                   onclick="return confirm('Are you sure you want to delete this achievement? This action cannot be undone.');">
+                                   data-delete-title="Delete Achievement"
+                                   data-delete-message="Are you sure you want to delete this achievement?"
+                                   data-delete-item="<?= h($r['title'] ?? ('Achievement #' . (int)$r['id'])) ?>"
+                                   data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete Achievement">
                                     <i class="fa-solid fa-trash"></i>
                                     <span class="d-none d-md-inline ms-1">Delete</span>
                                 </a>

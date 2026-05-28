@@ -148,7 +148,11 @@ require_once __DIR__ . '/header.php';
                         <li class="text-danger mt-2"><strong>Note:</strong> This will permanently remove the achievement and all associated photos.</li>
                     </ul>
 
-                    <form method="post">
+                    <form method="post" class="js-delete-confirm"
+                          data-delete-title="Delete Achievement"
+                          data-delete-message="Delete this achievement and all associated photos?"
+                          data-delete-item="<?= h($achievement['title']) ?>"
+                          data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete Achievement">
                         <input type="hidden" name="csrf_token" value="<?= h($csrf_token) ?>">
                         <input type="hidden" name="id" value="<?= (int)$achievement['id'] ?>">
 

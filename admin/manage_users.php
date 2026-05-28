@@ -1274,9 +1274,12 @@ while ($row = $res->fetch_assoc()) {
                                                 </a>
 
                                                 <a href="delete_user.php?id=<?= (int)$r['id'] ?>"
-                                                   class="btn btn-sm btn-outline-danger btn-icon"
+                                                   class="btn btn-sm btn-outline-danger btn-icon js-delete-confirm"
                                                    title="Delete"
-                                                   onclick="return confirm('Delete this user? This action cannot be undone.');">
+                                                   data-delete-title="Delete User"
+                                                   data-delete-message="Delete this user?"
+                                                   data-delete-item="<?= h($r['name'] ?? $r['email'] ?? ('User #' . (int)$r['id'])) ?>"
+                                                   data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete User">
                                                     <i class="fa-solid fa-trash"></i>
                                                 </a>
                                             </div>

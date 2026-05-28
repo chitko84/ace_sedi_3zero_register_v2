@@ -74,29 +74,33 @@ if (!$allowed_clusters) {
 $focus_area_options = getClubEnumValues($conn, 'focus_area');
 
 /* -----------------------------------------------------------
-   Email sending function
+   Email sending functions
 ------------------------------------------------------------*/
-function sendClubRegistrationEmail($toEmail, $toName, $clubName, $cluster, $registrationDate) {
+function createClubRegistrationMailer() {
     $mail = new PHPMailer(true);
-    try {
-        // Server settings
-        $mail->isSMTP();
-        $mail->Host       = 'ace-sedi.aiu.edu.my';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'acesediaiuedu';
-        $mail->Password   = 'acesedi2024';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port       = 465;
-        
-        // Recipients
-        $mail->setFrom('acesediaiuedu@ace-sedi.aiu.edu.my', '3ZERO Club System');
-        $mail->addAddress($toEmail, $toName);
-        
-        // Content
-        $mail->isHTML(true);
-        $mail->Subject = '3ZERO Club Registration Confirmation - ' . $clubName;
-        
-        $emailBody = "
+    $mail->isSMTP();
+    $mail->Host          = 'ace-sedi.aiu.edu.my';
+    $mail->SMTPAuth      = true;
+    $mail->Username      = 'acesediaiuedu';
+    $mail->Password      = 'acesedi2024';
+    $mail->SMTPSecure    = PHPMailer::ENCRYPTION_SMTPS;
+    $mail->Port          = 465;
+    $mail->Timeout       = 15;
+    $mail->SMTPKeepAlive = true;
+
+    $mail->setFrom('acesediaiuedu@ace-sedi.aiu.edu.my', '3ZERO Club System');
+    $mail->isHTML(true);
+
+    return $mail;
+}
+
+function buildClubRegistrationEmailBody($toName, $clubName, $cluster, $registrationDate) {
+    $safeName = htmlspecialchars($toName, ENT_QUOTES, 'UTF-8');
+    $safeClubName = htmlspecialchars($clubName, ENT_QUOTES, 'UTF-8');
+    $safeCluster = htmlspecialchars($cluster, ENT_QUOTES, 'UTF-8');
+    $safeRegistrationDate = htmlspecialchars($registrationDate, ENT_QUOTES, 'UTF-8');
+
+    return "
         <!DOCTYPE html>
         <html>
         <head>
@@ -117,15 +121,15 @@ function sendClubRegistrationEmail($toEmail, $toName, $clubName, $cluster, $regi
                 </div>
                 <div class='content'>
                     <h2>Registration Confirmed!</h2>
-                    <p>Dear <strong>$toName</strong>,</p>
+                    <p>Dear <strong>$safeName</strong>,</p>
                     
                     <p>We are pleased to inform you that your registration for the 3ZERO Club. We will notify on further updates.</p>
                     
                     <div class='club-info'>
                         <h3>Club Details:</h3>
-                        <p><strong>Club Name:</strong> $clubName</p>
-                        <p><strong>Cluster:</strong> $cluster</p>
-                        <p><strong>Registration Date:</strong> $registrationDate</p>
+                        <p><strong>Club Name:</strong> $safeClubName</p>
+                        <p><strong>Cluster:</strong> $safeCluster</p>
+                        <p><strong>Registration Date:</strong> $safeRegistrationDate</p>
                     </div>
                     
                     <p>As a registered member, you are now part of our initiative to create positive social impact through the 3ZERO principles:</p>
@@ -150,18 +154,55 @@ function sendClubRegistrationEmail($toEmail, $toName, $clubName, $cluster, $regi
         </body>
         </html>
         ";
-        
-        $mail->Body = $emailBody;
-        
-        // Alternative plain text version
-        $mail->AltBody = "Dear $toName,\n\nYour registration for the 3ZERO Club '$clubName' ($cluster) has been confirmed on $registrationDate.\n\nThank you for joining us!\n\n3ZERO Club Management Team\nAlbukhary International University";
-        
-        $mail->send();
-        return true;
-    } catch (Exception $e) {
-        error_log("Email sending failed for $toEmail: " . $mail->ErrorInfo);
-        return false;
+}
+
+function sendClubRegistrationEmails(array $recipients, $clubName, $cluster, $registrationDate) {
+    $sentCount = 0;
+    $mail = null;
+
+    try {
+        $mail = createClubRegistrationMailer();
+        $mail->smtpConnect();
+
+        foreach ($recipients as $recipient) {
+            $email = trim($recipient['email'] ?? '');
+            $name = trim($recipient['name'] ?? '');
+            $role = trim($recipient['role'] ?? 'Member');
+
+            try {
+                $mail->clearAddresses();
+                $mail->clearCCs();
+                $mail->clearBCCs();
+                $mail->clearReplyTos();
+                $mail->clearAttachments();
+                $mail->clearCustomHeaders();
+
+                $mail->addAddress($email, $name);
+                $mail->Subject = '3ZERO Club Registration Confirmation - ' . $clubName;
+                $mail->Body = buildClubRegistrationEmailBody($name, $clubName, $cluster, $registrationDate);
+                $mail->AltBody = "Dear $name,\n\nYour registration for the 3ZERO Club '$clubName' ($cluster) has been confirmed on $registrationDate.\n\nThank you for joining us!\n\n3ZERO Club Management Team\nAlbukhary International University";
+
+                $mail->send();
+                $sentCount++;
+            } catch (Throwable $e) {
+                $details = $mail->ErrorInfo ?: $e->getMessage();
+                error_log("Club registration email failed for {$role} ({$email}): {$details}");
+            }
+        }
+    } catch (Throwable $e) {
+        error_log("Club registration email SMTP connection failed: " . $e->getMessage());
+        foreach ($recipients as $recipient) {
+            $email = trim($recipient['email'] ?? '');
+            $role = trim($recipient['role'] ?? 'Member');
+            error_log("Club registration email failed for {$role} ({$email}): SMTP connection could not be opened.");
+        }
+    } finally {
+        if ($mail instanceof PHPMailer) {
+            $mail->smtpClose();
+        }
     }
+
+    return $sentCount;
 }
 
 /* -----------------------------------------------------------
@@ -464,46 +505,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conn->commit();
             
             /* -----------------------------------------------------------
-               Send confirmation emails to all club members
+               Send confirmation emails after successful database commit.
+               Email failures are logged but never fail the registration.
             ------------------------------------------------------------*/
-            $email_sent_count = 0;
-            $total_members = 5; // Key person + deputy + 3 members
-            $email_errors = [];
+            $email_recipients = [
+                ['email' => $key_person_email, 'name' => $key_person_name, 'role' => 'Key Person'],
+                ['email' => $deputy_email, 'name' => $deputy_key_person_name, 'role' => 'Deputy'],
+            ];
 
-            // Send to Key Person
-            if (sendClubRegistrationEmail($key_person_email, $key_person_name, $group_name_norm, $cluster, $date_of_registration)) {
-                $email_sent_count++;
-            } else {
-                $email_errors[] = "Failed to send email to Key Person: $key_person_email";
+            foreach ($members as $index => $m) {
+                $email_recipients[] = [
+                    'email' => $m['email'],
+                    'name' => $m['full_name'],
+                    'role' => 'Member ' . ($index + 1),
+                ];
             }
 
-            // Send to Deputy
-            if (sendClubRegistrationEmail($deputy_email, $deputy_key_person_name, $group_name_norm, $cluster, $date_of_registration)) {
-                $email_sent_count++;
-            } else {
-                $email_errors[] = "Failed to send email to Deputy: $deputy_email";
-            }
+            $total_members = count($email_recipients);
+            $email_sent_count = sendClubRegistrationEmails($email_recipients, $group_name_norm, $cluster, $date_of_registration);
 
-            // Send to 3 Regular Members
-            foreach ($members as $m) {
-                if (sendClubRegistrationEmail($m['email'], $m['full_name'], $group_name_norm, $cluster, $date_of_registration)) {
-                    $email_sent_count++;
-                } else {
-                    $email_errors[] = "Failed to send email to Member: {$m['email']}";
-                }
-            }
-
-            // Prepare success message with email status
-            $success_message = "Club registration submitted successfully!";
-            if ($email_sent_count > 0) {
-                $success_message .= " Confirmation emails sent to $email_sent_count out of $total_members members.";
-                // Log any email errors for debugging
-                if (!empty($email_errors)) {
-                    error_log("Club registration email errors: " . implode("; ", $email_errors));
-                }
-            } else {
-                $success_message .= " Note: Confirmation emails could not be sent, but registration was successful.";
-                error_log("All club registration emails failed. Check SMTP configuration.");
+            $success_message = "Club registration submitted successfully! Confirmation emails sent to $email_sent_count out of $total_members members.";
+            if ($email_sent_count < $total_members) {
+                $success_message .= " Some confirmation emails could not be sent, but registration was successful.";
             }
 
             $_SESSION['success'] = $success_message;
@@ -820,6 +843,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="Doctor of Philosophy (Education)">Doctor of Philosophy (Education)</option>
                             <option value="Bachelor in Computer Science (Honours)">Bachelor in Computer Science (Honours)</option>
                             <option value="Bachelor in Data Science (Honours)">Bachelor in Data Science (Honours)</option>
+                            <option value="Master of Computing (by Research)">Master of Computing (by Research)</option>
+                            <option value="Doctor of Philosophy in Computer Science">Doctor of Philosophy in Computer Science</option>
                             <option value="Foundation in Computing">Foundation in Computing</option>
                             <option value="Foundation in Arts">Foundation in Arts</option>
                         </select>
@@ -953,6 +978,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="Doctor of Philosophy (Education)">Doctor of Philosophy (Education)</option>
                             <option value="Bachelor in Computer Science (Honours)">Bachelor in Computer Science (Honours)</option>
                             <option value="Bachelor in Data Science (Honours)">Bachelor in Data Science (Honours)</option>
+                            <option value="Master of Computing (by Research)">Master of Computing (by Research)</option>
+                            <option value="Doctor of Philosophy in Computer Science">Doctor of Philosophy in Computer Science</option>
                             <option value="Foundation in Computing">Foundation in Computing</option>
                             <option value="Foundation in Arts">Foundation in Arts</option>
                         </select>
@@ -1088,6 +1115,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="Doctor of Philosophy (Education)">Doctor of Philosophy (Education)</option>
                             <option value="Bachelor in Computer Science (Honours)">Bachelor in Computer Science (Honours)</option>
                             <option value="Bachelor in Data Science (Honours)">Bachelor in Data Science (Honours)</option>
+                            <option value="Master of Computing (by Research)">Master of Computing (by Research)</option>
+                            <option value="Doctor of Philosophy in Computer Science">Doctor of Philosophy in Computer Science</option>
                             <option value="Foundation in Computing">Foundation in Computing</option>
                             <option value="Foundation in Arts">Foundation in Arts</option>
                         </select>
@@ -1178,6 +1207,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="text-muted mt-3">All fields marked with * are required</p>
         </div>
     </form>
+</div>
+
+<!-- Submission Wait Notice Modal -->
+<div class="modal fade" id="submissionWaitModal" tabindex="-1" aria-labelledby="submissionWaitModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="submissionWaitModalLabel">Before You Submit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0">
+                    This submission may take about 1-3 minutes to process. Please do not close this window or refresh the page after continuing.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Review Form</button>
+                <button type="button" class="btn btn-primary" id="confirmSubmissionWait">
+                    OK, Submit Now
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php include('footer.php'); ?>
@@ -1494,6 +1546,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (clubForm) {
         // Remove any existing submit handlers to prevent duplicates
         clubForm.removeEventListener('submit', clubForm._submitHandler);
+        const waitModalEl = document.getElementById('submissionWaitModal');
+        const confirmSubmissionWaitBtn = document.getElementById('confirmSubmissionWait');
+        const waitModal = waitModalEl ? new bootstrap.Modal(waitModalEl) : null;
+        
+        function setSubmittingState(form) {
+            const btn = form.querySelector('button[type="submit"]');
+            if (!btn) return;
+            btn.classList.add('is-loading');
+            btn.disabled = true;
+            const originalHtml = btn.innerHTML;
+            btn.setAttribute('data-original-html', originalHtml);
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span><span>Submitting...</span>';
+            
+            // Reset only if the request appears stuck beyond the expected processing window.
+            setTimeout(() => {
+                if (btn.disabled && !document.querySelector('.alert-success')) {
+                    btn.classList.remove('is-loading');
+                    btn.disabled = false;
+                    btn.innerHTML = btn.getAttribute('data-original-html') || '<i class="bi bi-send-check me-2"></i>Submit Registration';
+                    form.dataset.submissionConfirmed = 'false';
+                }
+            }, 210000);
+        }
         
         // Create new handler
         clubForm._submitHandler = function(e) {
@@ -1519,20 +1594,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 });
                 
                 if (isValid) {
-                    btn.classList.add('is-loading');
-                    btn.disabled = true;
-                    const originalHtml = btn.innerHTML;
-                    btn.setAttribute('data-original-html', originalHtml);
-                    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span><span>Submitting...</span>';
-                    
-                    // Set a timeout to reset button if submission takes too long (30 seconds)
-                    setTimeout(() => {
-                        if (btn.disabled && !document.querySelector('.alert-success')) {
-                            btn.classList.remove('is-loading');
-                            btn.disabled = false;
-                            btn.innerHTML = btn.getAttribute('data-original-html') || '<i class="bi bi-send-check me-2"></i>Submit Registration';
-                        }
-                    }, 30000);
+                    if (this.dataset.submissionConfirmed === 'true') {
+                        setSubmittingState(this);
+                        return;
+                    }
+
+                    e.preventDefault();
+                    if (waitModal) {
+                        waitModal.show();
+                    } else if (window.confirm('This submission may take about 1-3 minutes to process. Please do not close this window or refresh the page after continuing.')) {
+                        this.dataset.submissionConfirmed = 'true';
+                        this.requestSubmit();
+                    }
                 } else {
                     e.preventDefault();
                     // Show error message
@@ -1546,6 +1619,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         };
         
         clubForm.addEventListener('submit', clubForm._submitHandler);
+
+        confirmSubmissionWaitBtn?.addEventListener('click', function() {
+            clubForm.dataset.submissionConfirmed = 'true';
+            waitModal?.hide();
+            clubForm.requestSubmit();
+        });
     }
 
     // Header dropdowns (optional)

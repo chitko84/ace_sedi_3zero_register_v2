@@ -142,8 +142,11 @@ while ($r = $memRes->fetch_assoc()) $memberships[] = $r;
                 <a href="edit_user.php?id=<?= (int)$user['id'] ?>" class="btn btn-primary">
                     <i class="fa-solid fa-pen me-1"></i> Edit
                 </a>
-                <a href="delete_user.php?id=<?= (int)$user['id'] ?>" class="btn btn-outline-danger"
-                   onclick="return confirm('Delete this user? This action cannot be undone.');">
+                <a href="delete_user.php?id=<?= (int)$user['id'] ?>" class="btn btn-outline-danger js-delete-confirm"
+                   data-delete-title="Delete User"
+                   data-delete-message="Delete this user?"
+                   data-delete-item="<?= h($user['name'] ?? $user['email'] ?? ('User #' . (int)$user['id'])) ?>"
+                   data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete User">
                     <i class="fa-solid fa-trash me-1"></i> Delete
                 </a>
                 <a href="manage_users.php" class="btn btn-light">

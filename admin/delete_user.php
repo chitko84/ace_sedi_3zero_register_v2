@@ -130,7 +130,11 @@ $profilePhoto = !empty($target['profile_pic']) ? $target['profile_pic'] : '../up
                         </div>
                     </div>
 
-                    <form method="post" class="d-flex justify-content-end gap-2">
+                    <form method="post" class="d-flex justify-content-end gap-2 js-delete-confirm"
+                          data-delete-title="Delete User"
+                          data-delete-message="Delete this user account?"
+                          data-delete-item="<?= h($target['name']) ?>"
+                          data-delete-confirm-label="<i class='fa-solid fa-trash me-1'></i> Delete User">
                         <input type="hidden" name="csrf_token" value="<?= h($csrf_token) ?>">
                         <a href="view_user.php?id=<?= (int)$target['id'] ?>" class="btn btn-light">Cancel</a>
                         <button type="submit" class="btn btn-danger">

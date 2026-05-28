@@ -237,8 +237,10 @@ include 'header.php';
                                             </li>
                                         <?php endif; ?>
                                         <li>
-                                            <a class="dropdown-item text-danger" href="notifications.php?delete_notif=<?= (int)$notification['id'] ?>"
-                                               onclick="return confirm('Are you sure you want to delete this notification?')">
+                                            <a class="dropdown-item text-danger js-delete-confirm" href="notifications.php?delete_notif=<?= (int)$notification['id'] ?>"
+                                               data-delete-title="Delete Notification"
+                                               data-delete-message="Are you sure you want to delete this notification?"
+                                               data-delete-confirm-label="<i class='fas fa-trash me-1'></i> Delete">
                                                 <i class="fas fa-trash me-2"></i>Delete
                                             </a>
                                         </li>
