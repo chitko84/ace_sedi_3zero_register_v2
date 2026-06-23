@@ -1,22 +1,13 @@
 <?php
-include '../includes/db.php';
-session_start();
-
-/*
- * Make mysqli throw exceptions so try/catch works consistently.
- * If your db.php already enables this, this line is harmless.
- */
 if (function_exists('mysqli_report')) {
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 }
 
-// Include PHPMailer for email functionality
-require_once '../PHPMailer/src/Exception.php';
-require_once '../PHPMailer/src/PHPMailer.php';
-require_once '../PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/../includes/db.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
@@ -39,10 +30,28 @@ if ($user_query) {
     }
 }
 
+function clubColumnExists(mysqli $conn, string $column): bool {
+    $stmt = $conn->prepare("
+        SELECT COUNT(*) AS c
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'clubs'
+          AND COLUMN_NAME = ?
+    ");
+    $stmt->bind_param('s', $column);
+    $stmt->execute();
+
+    return (int)($stmt->get_result()->fetch_assoc()['c'] ?? 0) > 0;
+}
+
 function getClubEnumValues(mysqli $conn, $column) {
     $allowed = ['cluster', 'focus_area'];
 
     if (!in_array($column, $allowed, true)) {
+        return [];
+    }
+
+    if (!clubColumnExists($conn, $column)) {
         return [];
     }
 
@@ -67,143 +76,12 @@ function getClubEnumValues(mysqli $conn, $column) {
     return array_map('stripslashes', $matches[1] ?? []);
 }
 
+$has_focus_area = clubColumnExists($conn, 'focus_area');
 $allowed_clusters = getClubEnumValues($conn, 'cluster');
 if (!$allowed_clusters) {
     $allowed_clusters = ['Zero Poverty', 'Zero Unemployment', 'Zero Net Carbon Emissions'];
 }
-$focus_area_options = getClubEnumValues($conn, 'focus_area');
-
-/* -----------------------------------------------------------
-   Email sending functions
-------------------------------------------------------------*/
-function createClubRegistrationMailer() {
-    $mail = new PHPMailer(true);
-    $mail->isSMTP();
-    $mail->Host          = 'ace-sedi.aiu.edu.my';
-    $mail->SMTPAuth      = true;
-    $mail->Username      = 'acesediaiuedu';
-    $mail->Password      = 'acesedi2024';
-    $mail->SMTPSecure    = PHPMailer::ENCRYPTION_SMTPS;
-    $mail->Port          = 465;
-    $mail->Timeout       = 15;
-    $mail->SMTPKeepAlive = true;
-
-    $mail->setFrom('acesediaiuedu@ace-sedi.aiu.edu.my', '3ZERO Club System');
-    $mail->isHTML(true);
-
-    return $mail;
-}
-
-function buildClubRegistrationEmailBody($toName, $clubName, $cluster, $registrationDate) {
-    $safeName = htmlspecialchars($toName, ENT_QUOTES, 'UTF-8');
-    $safeClubName = htmlspecialchars($clubName, ENT_QUOTES, 'UTF-8');
-    $safeCluster = htmlspecialchars($cluster, ENT_QUOTES, 'UTF-8');
-    $safeRegistrationDate = htmlspecialchars($registrationDate, ENT_QUOTES, 'UTF-8');
-
-    return "
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background: linear-gradient(135deg, #1a5276, #0e2a47); color: white; padding: 20px; text-align: center; border-radius: 10px 10px 0 0; }
-                .content { background: #f9f9f9; padding: 20px; border-radius: 0 0 10px 10px; }
-                .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #666; }
-                .club-info { background: white; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #1a5276; }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='header'>
-                    <h1>3ZERO Club Registration</h1>
-                    <p>Albukhary International University</p>
-                </div>
-                <div class='content'>
-                    <h2>Registration Confirmed!</h2>
-                    <p>Dear <strong>$safeName</strong>,</p>
-                    
-                    <p>We are pleased to inform you that your registration for the 3ZERO Club. We will notify on further updates.</p>
-                    
-                    <div class='club-info'>
-                        <h3>Club Details:</h3>
-                        <p><strong>Club Name:</strong> $safeClubName</p>
-                        <p><strong>Cluster:</strong> $safeCluster</p>
-                        <p><strong>Registration Date:</strong> $safeRegistrationDate</p>
-                    </div>
-                    
-                    <p>As a registered member, you are now part of our initiative to create positive social impact through the 3ZERO principles:</p>
-                    <ul>
-                        <li><strong>Zero Poverty</strong> - Creating economic opportunities for all</li>
-                        <li><strong>Zero Unemployment</strong> - Empowering youth through skills development</li>
-                        <li><strong>Zero Net Carbon Emissions</strong> - Building a sustainable future</li>
-                    </ul>
-                    
-                    <p>You will be notified about upcoming meetings, events, and activities through this email address.</p>
-                    
-                    <p>Thank you for joining us in making a difference!</p>
-                    
-                    <p>Best regards,<br>
-                    <strong>3ZERO Club Management Team</strong><br>
-                    Albukhary International University</p>
-                </div>
-                <div class='footer'>
-                    <p>This is an automated message. Please do not reply to this email.</p>
-                </div>
-            </div>
-        </body>
-        </html>
-        ";
-}
-
-function sendClubRegistrationEmails(array $recipients, $clubName, $cluster, $registrationDate) {
-    $sentCount = 0;
-    $mail = null;
-
-    try {
-        $mail = createClubRegistrationMailer();
-        $mail->smtpConnect();
-
-        foreach ($recipients as $recipient) {
-            $email = trim($recipient['email'] ?? '');
-            $name = trim($recipient['name'] ?? '');
-            $role = trim($recipient['role'] ?? 'Member');
-
-            try {
-                $mail->clearAddresses();
-                $mail->clearCCs();
-                $mail->clearBCCs();
-                $mail->clearReplyTos();
-                $mail->clearAttachments();
-                $mail->clearCustomHeaders();
-
-                $mail->addAddress($email, $name);
-                $mail->Subject = '3ZERO Club Registration Confirmation - ' . $clubName;
-                $mail->Body = buildClubRegistrationEmailBody($name, $clubName, $cluster, $registrationDate);
-                $mail->AltBody = "Dear $name,\n\nYour registration for the 3ZERO Club '$clubName' ($cluster) has been confirmed on $registrationDate.\n\nThank you for joining us!\n\n3ZERO Club Management Team\nAlbukhary International University";
-
-                $mail->send();
-                $sentCount++;
-            } catch (Throwable $e) {
-                $details = $mail->ErrorInfo ?: $e->getMessage();
-                error_log("Club registration email failed for {$role} ({$email}): {$details}");
-            }
-        }
-    } catch (Throwable $e) {
-        error_log("Club registration email SMTP connection failed: " . $e->getMessage());
-        foreach ($recipients as $recipient) {
-            $email = trim($recipient['email'] ?? '');
-            $role = trim($recipient['role'] ?? 'Member');
-            error_log("Club registration email failed for {$role} ({$email}): SMTP connection could not be opened.");
-        }
-    } finally {
-        if ($mail instanceof PHPMailer) {
-            $mail->smtpClose();
-        }
-    }
-
-    return $sentCount;
-}
+$focus_area_options = $has_focus_area ? getClubEnumValues($conn, 'focus_area') : [];
 
 /* -----------------------------------------------------------
    Handle POST
@@ -279,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Invalid cluster selected";
     }
 
-    if ($focus_area !== '' && !in_array($focus_area, $focus_area_options, true)) {
+    if ($has_focus_area && $focus_area !== '' && !in_array($focus_area, $focus_area_options, true)) {
         $errors[] = "Invalid focus area selected";
     }
 
@@ -358,8 +236,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Ensure each email exists in users table with role='user'
     if (empty($errors)) {
-        $ph = implode(',', array_fill(0, 5, '?'));
-        $q = $conn->prepare("SELECT LOWER(email) AS e FROM users WHERE role='user' AND LOWER(email) IN ($ph)");
+        $ph = implode(',', array_fill(0, 5, 'CAST(? AS CHAR CHARACTER SET utf8mb4) COLLATE utf8mb4_unicode_ci'));
+        $q = $conn->prepare("SELECT LOWER(email) AS e FROM users WHERE role='user' AND LOWER(email) COLLATE utf8mb4_unicode_ci IN ($ph)");
         $q->bind_param("sssss", $all_emails[0], $all_emails[1], $all_emails[2], $all_emails[3], $all_emails[4]);
         $q->execute();
         $found = [];
@@ -376,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Duplicate checks (only Club ID and Group Name should be unique)
     if (empty($errors)) {
         if ($club_identifier_norm !== '') {
-            $check_identifier_sql = "SELECT 1 FROM clubs WHERE club_identifier = ? LIMIT 1";
+            $check_identifier_sql = "SELECT 1 FROM clubs WHERE club_identifier COLLATE utf8mb4_unicode_ci = CAST(? AS CHAR CHARACTER SET utf8mb4) COLLATE utf8mb4_unicode_ci LIMIT 1";
             $stmt = $conn->prepare($check_identifier_sql);
             $stmt->bind_param("s", $club_identifier_norm);
             $stmt->execute();
@@ -385,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        $check_group_sql = "SELECT 1 FROM clubs WHERE LOWER(group_name) = LOWER(?) LIMIT 1";
+        $check_group_sql = "SELECT 1 FROM clubs WHERE LOWER(group_name) COLLATE utf8mb4_unicode_ci = LOWER(CAST(? AS CHAR CHARACTER SET utf8mb4)) COLLATE utf8mb4_unicode_ci LIMIT 1";
         $stmt = $conn->prepare($check_group_sql);
         $stmt->bind_param("s", $group_name_norm);
         $stmt->execute();
@@ -404,32 +282,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->begin_transaction();
         try {
             // Insert into clubs (status defaults in DB; store blank Club ID as NULL)
-            $club_sql = "INSERT INTO clubs (
-                club_identifier,
-                group_name,
-                cluster,
-                focus_area,
-                cluster_advisor,
-                key_person_name,
-                key_person_student_id,
-                deputy_key_person_name,
-                deputy_key_person_student_id,
-                date_of_registration
-            ) VALUES (NULLIF(?, ''), ?, ?, NULLIF(?, ''), ?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($club_sql);
-            $stmt->bind_param(
-                "ssssssssss",
-                $club_identifier_norm,
-                $group_name_norm,
-                $cluster,
-                $focus_area,
-                $cluster_advisor,
-                $key_person_name,
-                $key_person_student_id,
-                $deputy_key_person_name,
-                $deputy_key_person_student_id,
-                $date_of_registration
-            );
+            $club_identifier_db = $club_identifier_norm === '' ? null : $club_identifier_norm;
+            $focus_area_db = ($has_focus_area && $focus_area !== '') ? $focus_area : null;
+            $advisor_db = $cluster_advisor !== '' ? $cluster_advisor : 'Unknown';
+
+            if ($has_focus_area) {
+                $club_sql = "INSERT INTO clubs (
+                    club_identifier,
+                    group_name,
+                    cluster,
+                    focus_area,
+                    cluster_advisor,
+                    key_person_name,
+                    key_person_student_id,
+                    deputy_key_person_name,
+                    deputy_key_person_student_id,
+                    date_of_registration
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($club_sql);
+                $stmt->bind_param(
+                    "ssssssssss",
+                    $club_identifier_db,
+                    $group_name_norm,
+                    $cluster,
+                    $focus_area_db,
+                    $advisor_db,
+                    $key_person_name,
+                    $key_person_student_id,
+                    $deputy_key_person_name,
+                    $deputy_key_person_student_id,
+                    $date_of_registration
+                );
+            } else {
+                $club_sql = "INSERT INTO clubs (
+                    club_identifier,
+                    group_name,
+                    cluster,
+                    cluster_advisor,
+                    key_person_name,
+                    key_person_student_id,
+                    deputy_key_person_name,
+                    deputy_key_person_student_id,
+                    date_of_registration
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($club_sql);
+                $stmt->bind_param(
+                    "sssssssss",
+                    $club_identifier_db,
+                    $group_name_norm,
+                    $cluster,
+                    $advisor_db,
+                    $key_person_name,
+                    $key_person_student_id,
+                    $deputy_key_person_name,
+                    $deputy_key_person_student_id,
+                    $date_of_registration
+                );
+            }
             $stmt->execute();
             $club_id = $conn->insert_id;
 
@@ -504,32 +413,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $conn->commit();
             
-            /* -----------------------------------------------------------
-               Send confirmation emails after successful database commit.
-               Email failures are logged but never fail the registration.
-            ------------------------------------------------------------*/
-            $email_recipients = [
-                ['email' => $key_person_email, 'name' => $key_person_name, 'role' => 'Key Person'],
-                ['email' => $deputy_email, 'name' => $deputy_key_person_name, 'role' => 'Deputy'],
-            ];
-
-            foreach ($members as $index => $m) {
-                $email_recipients[] = [
-                    'email' => $m['email'],
-                    'name' => $m['full_name'],
-                    'role' => 'Member ' . ($index + 1),
-                ];
-            }
-
-            $total_members = count($email_recipients);
-            $email_sent_count = sendClubRegistrationEmails($email_recipients, $group_name_norm, $cluster, $date_of_registration);
-
-            $success_message = "Club registration submitted successfully! Confirmation emails sent to $email_sent_count out of $total_members members.";
-            if ($email_sent_count < $total_members) {
-                $success_message .= " Some confirmation emails could not be sent, but registration was successful.";
-            }
-
-            $_SESSION['success'] = $success_message;
+            $_SESSION['success'] = "Club registration submitted successfully.";
             header('Location: myclubs.php');
             exit();
 
@@ -548,7 +432,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $_SESSION['error'] = "Registration failed: " . $e->getMessage();
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             $conn->rollback();
             $_SESSION['error'] = "Registration failed: " . $e->getMessage();
         }
@@ -1219,7 +1103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="modal-body">
                 <p class="mb-0">
-                    This submission may take about 1-3 minutes to process. Please do not close this window or refresh the page after continuing.
+                    Please review the registration details before submitting.
                 </p>
             </div>
             <div class="modal-footer">
@@ -1238,6 +1122,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script>
     // User data from PHP
     const users = <?php echo json_encode($users, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+    const oldFormValues = <?php echo json_encode($_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : [], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+
+    function restoreOldFormValues() {
+        if (!oldFormValues || Object.keys(oldFormValues).length === 0) return;
+
+        Object.entries(oldFormValues).forEach(([name, value]) => {
+            if (name === 'password' || name.toLowerCase().includes('password')) return;
+
+            document.querySelectorAll(`[name="${CSS.escape(name)}"]`).forEach(field => {
+                if (field.type === 'file' || field.type === 'password') return;
+                if (field.type === 'checkbox' || field.type === 'radio') {
+                    field.checked = Array.isArray(value)
+                        ? value.includes(field.value)
+                        : field.value === value;
+                    return;
+                }
+                field.value = value;
+            });
+        });
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
         // Set date if empty
@@ -1271,6 +1175,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         for (let i = 1; i <= 3; i++) {
             initEmailSearch(`member${i}_email`, `member${i}_search_results`, `member${i}_auto_fill_notice`);
         }
+
+        restoreOldFormValues();
         
         // Reset button state if there are errors or success messages on page load
         const errorAlert = document.querySelector('.alert-danger');

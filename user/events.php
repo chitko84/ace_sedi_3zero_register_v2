@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // user/events.php
 
 // Start session if not already started
@@ -7,6 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 include '../includes/db.php';
+require_once __DIR__ . '/../includes/image_upload_helper.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
@@ -91,6 +92,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_event'])) {
     if ($files && isset($files['name']) && is_array($files['name'])) {
         for ($i=0; $i<count($files['name']); $i++) {
             if ($files['error'][$i] === UPLOAD_ERR_OK && $files['size'][$i] > 0 && $files['name'][$i] !== '') {
+                if ((int)$files['size'][$i] > IMAGE_UPLOAD_MAX_BYTES) {
+                    $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
+                    header('Location: events.php'); exit();
+                }
                 $fileCount++;
                 $totalBytes += (int)$files['size'][$i];
             }
@@ -100,8 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_event'])) {
         $_SESSION['error'] = "Please upload between 1 and 3 images or Your Image Size is Too Big. Please compress your image at this link (https://imagecompressor.com/) <- copy this link and paste it in your browser tab";
         header('Location: events.php'); exit();
     }
-    if ($totalBytes > 10 * 1024 * 1024) {
-        $_SESSION['error'] = "Each Image Size has to be 1.9 MB or less. Please compress your image if you get this error at (https://imagecompressor.com/)";
+    if ($totalBytes > 3 * IMAGE_UPLOAD_MAX_BYTES) {
+        $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
         header('Location: events.php'); exit();
     }
 
@@ -127,6 +132,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_event'])) {
     for ($i=0; $i<count($files['name']); $i++) {
         if ($files['error'][$i] === UPLOAD_ERR_OK && $files['size'][$i] > 0 && $files['name'][$i] !== '') {
             $tmpPath = $files['tmp_name'][$i];
+            if ((int)$files['size'][$i] > IMAGE_UPLOAD_MAX_BYTES) {
+                $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
+                $conn->query("DELETE FROM events WHERE id = ".intval($event_id));
+                header('Location: events.php'); exit();
+            }
             $mime = $finfo->file($tmpPath);
             if (!in_array($mime, $allowedMime, true)) {
                 $_SESSION['error'] = "Only JPG, PNG, or WEBP images are allowed.";
@@ -168,6 +178,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_event'])) {
         $conn->query("DELETE FROM events WHERE id = ".intval($event_id));
     } else {
         $_SESSION['success'] = "Event added successfully! It is now pending admin approval.";
+    }
+
+    header('Location: events.php'); exit();
+}
+
+// Handle event image reupload
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reupload_event_photos'])) {
+    $event_id = intval($_POST['event_id'] ?? 0);
+
+    $verify_sql = "SELECT 1 FROM events WHERE id = ? AND created_by = ? LIMIT 1";
+    $verify_stmt = $conn->prepare($verify_sql);
+    $verify_stmt->bind_param("ii", $event_id, $user_id);
+    $verify_stmt->execute();
+    if ($verify_stmt->get_result()->num_rows < 1) {
+        $_SESSION['error'] = "You don't have permission to replace photos for this event.";
+        header('Location: events.php'); exit();
+    }
+
+    $validatedPhotos = image_upload_validate_many($_FILES['photos'] ?? [], 1, 3);
+    if (!$validatedPhotos['ok']) {
+        $_SESSION['error'] = $validatedPhotos['error'];
+        header('Location: events.php'); exit();
+    }
+
+    $oldPhotos = [];
+    $old_stmt = $conn->prepare("SELECT file_path FROM event_photos WHERE event_id = ?");
+    $old_stmt->bind_param("i", $event_id);
+    $old_stmt->execute();
+    $old_result = $old_stmt->get_result();
+    while ($row = $old_result->fetch_assoc()) {
+        $oldPhotos[] = $row['file_path'];
+    }
+
+    $uploadDirAbs = __DIR__ . '/../uploads/events';
+    $conn->begin_transaction();
+
+    try {
+        $delete_stmt = $conn->prepare("DELETE FROM event_photos WHERE event_id = ?");
+        $delete_stmt->bind_param("i", $event_id);
+        $delete_stmt->execute();
+
+        foreach ($validatedPhotos['files'] as $photoFile) {
+            $moved = image_upload_move_validated($photoFile, $uploadDirAbs, '../uploads/events', 'evt');
+            if (!$moved['ok']) {
+                throw new RuntimeException($moved['error']);
+            }
+
+            $photo_sql = "INSERT INTO event_photos (event_id, file_path, original_name) VALUES (?, ?, ?)";
+            $photo_stmt = $conn->prepare($photo_sql);
+            $photo_stmt->bind_param("iss", $event_id, $moved['db_path'], $moved['original_name']);
+            $photo_stmt->execute();
+        }
+
+        $conn->commit();
+        foreach ($oldPhotos as $oldPath) {
+            image_upload_delete_db_path($oldPath, __DIR__ . '/..');
+        }
+        $_SESSION['success'] = "Event images updated successfully.";
+    } catch (Throwable $e) {
+        $conn->rollback();
+        $_SESSION['error'] = "Could not update event images. Please try again.";
     }
 
     header('Location: events.php'); exit();
@@ -593,6 +664,12 @@ foreach ($events as $e) {
                         onclick="loadEditForm(<?= $e['id'] ?>, '<?= htmlspecialchars(addslashes($e['title'])) ?>', '<?= htmlspecialchars(addslashes($e['description'])) ?>', '<?= $e['start_date'] ?>', '<?= $e['start_time'] ?>', '<?= $e['end_date'] ?>', '<?= $e['end_time'] ?>', '<?= $e['status'] ?>')">
                   <i class="bi bi-pencil"></i>
                 </button>
+                <button class="btn btn-sm btn-outline-success me-1"
+                        data-bs-toggle="modal"
+                        data-bs-target="#reuploadEventPhotosModal"
+                        onclick="setReuploadEventId(<?= $e['id'] ?>)">
+                  <i class="bi bi-image"></i>
+                </button>
                 <button class="btn btn-sm btn-outline-danger" 
                         data-bs-toggle="modal" 
                         data-bs-target="#deleteEventModal" 
@@ -702,9 +779,9 @@ foreach ($events as $e) {
             </div>
             
             <div class="col-12">
-              <label class="form-label">Photos (1–3, JPG/PNG/WEBP, total ≤ 10 MB)</label>
+              <label class="form-label">Photos (1-3, JPG/PNG/WEBP, each <= 1MB)</label>
               <input type="file" name="photos[]" id="photos" class="form-control" accept=".jpg,.jpeg,.png,.webp" multiple required>
-              <div class="form-text">You can select up to 3 images.</div>
+              <div class="form-text"><?= htmlspecialchars(IMAGE_UPLOAD_DISCLAIMER, ENT_QUOTES, 'UTF-8') ?></div>
               <div id="preview" class="d-flex gap-2 mt-2 flex-wrap"></div>
             </div>
           </div>
@@ -773,6 +850,32 @@ foreach ($events as $e) {
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
           <button class="btn btn-primary" type="submit" name="edit_event">Update Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Reupload Event Photos Modal -->
+<div class="modal fade" id="reuploadEventPhotosModal" tabindex="-1" aria-labelledby="reuploadEventPhotosLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="events.php" enctype="multipart/form-data">
+        <input type="hidden" name="event_id" id="reupload_event_id">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title" id="reuploadEventPhotosLabel">Replace Event Images</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label">New Photos (1-3, JPG/PNG/WEBP, each <= 1MB)</label>
+          <input type="file" name="photos[]" id="reupload_event_photos" class="form-control" accept=".jpg,.jpeg,.png,.webp" multiple required>
+          <div class="form-text"><?= htmlspecialchars(IMAGE_UPLOAD_DISCLAIMER, ENT_QUOTES, 'UTF-8') ?></div>
+          <div id="reuploadEventPreview" class="d-flex gap-2 mt-2 flex-wrap"></div>
+          <small class="text-muted d-block mt-2">Existing event images will be replaced after you submit.</small>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-success" type="submit" name="reupload_event_photos">Replace Images</button>
         </div>
       </form>
     </div>
@@ -852,23 +955,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// File upload preview and validation
-document.getElementById('photos')?.addEventListener('change', function() {
-    const files = Array.from(this.files || []);
-    const preview = document.getElementById('preview');
+function previewImageFiles(input, previewId) {
+    const files = Array.from(input.files || []);
+    const preview = document.getElementById(previewId);
     preview.innerHTML = '';
 
     if (files.length < 1) {
-        this.setCustomValidity('Please select at least 1 image.');
+        input.setCustomValidity('Please select at least 1 image.');
     } else if (files.length > 3) {
-        this.setCustomValidity('You can upload a maximum of 3 images.');
+        input.setCustomValidity('You can upload a maximum of 3 images.');
+    } else if (files.some(file => file.size > 1024 * 1024)) {
+        input.setCustomValidity('Image size must be less than or equal to 1MB. Please compress the image and upload again.');
+    } else if (files.some(file => !['image/jpeg', 'image/png', 'image/webp'].includes(file.type))) {
+        input.setCustomValidity('Only JPG, JPEG, PNG, and WEBP images are allowed.');
     } else {
-        this.setCustomValidity('');
-    }
-
-    const total = files.reduce((s, f) => s + f.size, 0);
-    if (total > 10 * 1024 * 1024) {
-        this.setCustomValidity('Total size exceeds 10 MB.');
+        input.setCustomValidity('');
     }
 
     files.slice(0, 3).forEach(f => {
@@ -882,6 +983,15 @@ document.getElementById('photos')?.addEventListener('change', function() {
         img.onload = () => URL.revokeObjectURL(url);
         preview.appendChild(img);
     });
+}
+
+// File upload preview and validation
+document.getElementById('photos')?.addEventListener('change', function() {
+    previewImageFiles(this, 'preview');
+});
+
+document.getElementById('reupload_event_photos')?.addEventListener('change', function() {
+    previewImageFiles(this, 'reuploadEventPreview');
 });
 
 // Edit form functions
@@ -898,6 +1008,10 @@ function loadEditForm(id, title, description, startDate, startTime, endDate, end
 
 function setDeleteId(id) {
     document.getElementById('delete_event_id').value = id;
+}
+
+function setReuploadEventId(id) {
+    document.getElementById('reupload_event_id').value = id;
 }
 
 // Date and time validation for forms

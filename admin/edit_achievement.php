@@ -3,6 +3,7 @@
 // --- NO OUTPUT ABOVE THIS LINE ---
 
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/image_upload_helper.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 // --- Admin gate (redirect before any output) ---
@@ -40,8 +41,8 @@ function ensure_ach_upload_dir(): array {
 }
 
 function is_allowed_img($tmpPath, $origName): ?string {
-    // Returns extension to use (jpg/png/gif/webp) or null if disallowed
-    $allowed = ['image/jpeg'=>'jpg','image/png'=>'png','image/gif'=>'gif','image/webp'=>'webp'];
+    // Returns extension to use (jpg/png/webp) or null if disallowed
+    $allowed = ['image/jpeg'=>'jpg','image/png'=>'png','image/webp'=>'webp'];
     if (class_exists('finfo')) {
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime  = @$finfo->file($tmpPath);
@@ -49,7 +50,7 @@ function is_allowed_img($tmpPath, $origName): ?string {
     }
     // Fallback: guess by extension
     $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
-    if (in_array($ext, ['jpg','jpeg','png','gif','webp'], true)) {
+    if (in_array($ext, ['jpg','jpeg','png','webp'], true)) {
         return $ext === 'jpeg' ? 'jpg' : $ext;
     }
     return null;
@@ -132,8 +133,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $errors[] = "Upload error for file \"{$name}\" (code {$err}).";
                     continue;
                 }
-                if ($size > 5*1024*1024) { // 5MB
-                    $errors[] = "File \"{$name}\" exceeds 5MB limit.";
+                if ($size > IMAGE_UPLOAD_MAX_BYTES) {
+                    $errors[] = IMAGE_UPLOAD_SIZE_ERROR;
                     continue;
                 }
                 $ext = is_allowed_img($tmp, $name);
@@ -316,8 +317,9 @@ $achievedOnVal = $achievement['achieved_on'] ?? '';
 
                         <div class="col-12">
                             <label class="form-label">Upload New Photos (optional)</label>
-                            <input type="file" class="form-control" name="photos[]" accept="image/*" multiple>
-                            <div class="form-note mt-1">JPG, PNG, GIF, WEBP. Max 5MB each. You can select multiple files.</div>
+                            <input type="file" class="form-control" id="new_photos" name="photos[]" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple>
+                            <div class="form-note mt-1"><?= h(IMAGE_UPLOAD_DISCLAIMER) ?> Allowed formats: JPG, PNG, WEBP.</div>
+                            <div id="newPhotoPreview" class="d-flex gap-2 mt-2 flex-wrap"></div>
                         </div>
 
                         <?php if (!empty($photos)): ?>
@@ -371,5 +373,38 @@ $achievedOnVal = $achievement['achieved_on'] ?? '';
         </div>
     </div>
 </main>
+
+<script>
+document.getElementById('new_photos')?.addEventListener('change', function () {
+    const preview = document.getElementById('newPhotoPreview');
+    preview.innerHTML = '';
+    const files = Array.from(this.files || []);
+
+    if (files.some(file => file.size > 1024 * 1024)) {
+        alert('Image size must be less than or equal to 1MB. Please compress the image and upload again.');
+        this.value = '';
+        return;
+    }
+
+    if (files.some(file => !['image/jpeg', 'image/png', 'image/webp'].includes(file.type))) {
+        alert('Only JPG, JPEG, PNG, and WEBP images are allowed.');
+        this.value = '';
+        return;
+    }
+
+    files.forEach(file => {
+        const img = document.createElement('img');
+        const url = URL.createObjectURL(file);
+        img.src = url;
+        img.alt = 'Selected image preview';
+        img.style.width = '90px';
+        img.style.height = '90px';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '6px';
+        img.onload = () => URL.revokeObjectURL(url);
+        preview.appendChild(img);
+    });
+});
+</script>
 
 <?php require_once __DIR__ . '/footer.php'; ?>

@@ -11,6 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 include '../includes/db.php';
+require_once __DIR__ . '/../includes/image_upload_helper.php';
 
 // Function to validate and get correct profile picture path
 function getValidProfilePath($profilePic) {
@@ -60,40 +61,14 @@ function getValidProfilePath($profilePic) {
 
 // Function to save base64 image to file
 function saveBase64Image($base64Image, $userId) {
-    $uploadDir = '../uploads/profiles/';
-    
-    // Create directory if it doesn't exist
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-    
-    // Extract the base64 data
-    if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type)) {
-        $data = substr($base64Image, strpos($base64Image, ',') + 1);
-        $type = strtolower($type[1]); // jpg, png, gif
-        
-        if (!in_array($type, ['jpg', 'jpeg', 'png', 'gif'])) {
-            return false;
-        }
-        
-        $data = base64_decode($data);
-        if ($data === false) {
-            return false;
-        }
-    } else {
-        return false;
-    }
-    
-    // Generate unique filename
-    $filename = "user_{$userId}_" . uniqid() . ".{$type}";
-    $filePath = $uploadDir . $filename;
-    
-    // Save the file
-    if (file_put_contents($filePath, $data)) {
-        return $filename; // Return just the filename for database storage
-    }
-    
-    return false;
+    $savedPath = image_upload_base64_to_file(
+        $base64Image,
+        __DIR__ . '/../uploads/profiles',
+        'uploads/profiles',
+        'user_' . (int)$userId
+    );
+
+    return $savedPath ? basename($savedPath) : false;
 }
 
 // Detect auth state and load user data
@@ -173,35 +148,39 @@ if (isset($_SESSION['user_id'])) {
                     $updateSql .= ", profile_pic = ?";
                     $params[] = $newProfilePic;
                     $types .= "s";
+                } else {
+                    $error_message = IMAGE_UPLOAD_SIZE_ERROR;
                 }
             }
             
-            // Complete the query
-            $updateSql .= " WHERE id = ?";
-            $params[] = $user_id;
-            $types .= "i";
-            
-            // Update user in database
-            if ($updateStmt = $conn->prepare($updateSql)) {
-                $updateStmt->bind_param($types, ...$params);
-                if ($updateStmt->execute()) {
-                    $success_message = "Profile updated successfully!";
-                    
-                    // Reload user data to reflect changes immediately
-                    $uStmt->execute();
-                    $uRes = $uStmt->get_result();
-                    $user = $uRes->fetch_assoc();
-                    
-                    // Update profile photo if a new one was uploaded
-                    if ($newProfilePic) {
-                        $profilePhoto = getValidProfilePath($newProfilePic);
+            if ($error_message === '') {
+                // Complete the query
+                $updateSql .= " WHERE id = ?";
+                $params[] = $user_id;
+                $types .= "i";
+                
+                // Update user in database
+                if ($updateStmt = $conn->prepare($updateSql)) {
+                    $updateStmt->bind_param($types, ...$params);
+                    if ($updateStmt->execute()) {
+                        $success_message = "Profile updated successfully!";
+                        
+                        // Reload user data to reflect changes immediately
+                        $uStmt->execute();
+                        $uRes = $uStmt->get_result();
+                        $user = $uRes->fetch_assoc();
+                        
+                        // Update profile photo if a new one was uploaded
+                        if ($newProfilePic) {
+                            $profilePhoto = getValidProfilePath($newProfilePic);
+                        }
+                    } else {
+                        $error_message = "Error updating profile: " . $conn->error;
                     }
+                    $updateStmt->close();
                 } else {
-                    $error_message = "Error updating profile: " . $conn->error;
+                    $error_message = "Database error: " . $conn->error;
                 }
-                $updateStmt->close();
-            } else {
-                $error_message = "Database error: " . $conn->error;
             }
             
         } elseif (isset($_POST['change_password'])) {
@@ -718,6 +697,7 @@ body { padding-top: var(--header-h); }
               <i class="bi bi-camera"></i>
             </label>
           </div>
+          <small class="text-muted d-block mt-2"><?= htmlspecialchars(IMAGE_UPLOAD_DISCLAIMER, ENT_QUOTES, 'UTF-8') ?></small>
           <h4 class="mb-0"><?= htmlspecialchars($user['name'] ?? 'User') ?></h4>
           <small class="text-muted"><?= htmlspecialchars($user['email'] ?? '') ?></small>
           <div class="d-flex justify-content-center gap-2 mt-3">
@@ -979,6 +959,17 @@ setTimeout(() => {
 
 profilePicInput?.addEventListener('change', function(){
   if (this.files && this.files[0]) {
+    const file = this.files[0];
+    if (file.size > 1024 * 1024) {
+      alert('Image size must be less than or equal to 1MB. Please compress the image and upload again.');
+      this.value = '';
+      return;
+    }
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      alert('Only JPG, JPEG, PNG, and WEBP images are allowed.');
+      this.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = function(e){
       imageToCrop.src = e.target.result;

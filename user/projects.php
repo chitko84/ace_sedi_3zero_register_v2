@@ -5,6 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 include '../includes/db.php';
+require_once __DIR__ . '/../includes/image_upload_helper.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
@@ -78,6 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $totalBytes = 0;
             for ($i = 0; $i < count($files['name']); $i++) {
                 if ($files['error'][$i] === UPLOAD_ERR_OK && $files['size'][$i] > 0 && $files['name'][$i] !== '') {
+                    if ((int)$files['size'][$i] > IMAGE_UPLOAD_MAX_BYTES) {
+                        $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
+                        $conn->query("DELETE FROM projects WHERE id = " . intval($activity_id));
+                        header('Location: projects.php');
+                        exit();
+                    }
                     $fileCount++;
                     $totalBytes += (int)$files['size'][$i];
                 }
@@ -101,9 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // 5 MB total limit
-            $maxTotal = 5 * 1024 * 1024;
+            $maxTotal = 3 * IMAGE_UPLOAD_MAX_BYTES;
             if ($totalBytes > $maxTotal) {
-                $_SESSION['error'] = "Total photos size must be 5 MB or less. If the image is too large please compress your image at this website (https://imagecompressor.com/)";
+                $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
                 // Rollback
                 $conn->query("DELETE FROM projects WHERE id = " . intval($activity_id));
                 header('Location: projects.php');
@@ -124,6 +131,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             for ($i = 0; $i < count($files['name']); $i++) {
                 if ($files['error'][$i] === UPLOAD_ERR_OK && $files['size'][$i] > 0 && $files['name'][$i] !== '') {
                     $tmpPath = $files['tmp_name'][$i];
+                    if ((int)$files['size'][$i] > IMAGE_UPLOAD_MAX_BYTES) {
+                        $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
+                        $conn->query("DELETE FROM projects WHERE id = " . intval($activity_id));
+                        header('Location: projects.php');
+                        exit();
+                    }
                     $mime = $finfo->file($tmpPath);
                     if (!in_array($mime, $allowedMime, true)) {
                         $_SESSION['error'] = "Only JPG, PNG, or WEBP images are allowed.";
@@ -187,6 +200,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['success'] = "Activity updated successfully! Resubmitted for admin approval.";
         } else {
             $_SESSION['error'] = "Error updating activity. Please try again.";
+        }
+    }
+
+    if (isset($_POST['reupload_activity_photos'])) {
+        $activity_id = (int)($_POST['activity_id'] ?? 0);
+
+        $verify_sql = "SELECT id FROM projects WHERE id = ? AND created_by = ? LIMIT 1";
+        $verify_stmt = $conn->prepare($verify_sql);
+        $verify_stmt->bind_param("ii", $activity_id, $user_id);
+        $verify_stmt->execute();
+
+        if ($verify_stmt->get_result()->num_rows < 1) {
+            $_SESSION['error'] = "You don't have permission to replace photos for this activity.";
+        } else {
+            $validatedPhotos = image_upload_validate_many($_FILES['photos'] ?? [], 1, 3);
+
+            if (!$validatedPhotos['ok']) {
+                $_SESSION['error'] = $validatedPhotos['error'];
+            } else {
+                $oldPhotos = [];
+                $photos_stmt = $conn->prepare("SELECT file_path FROM activity_photos WHERE activity_id = ?");
+                $photos_stmt->bind_param("i", $activity_id);
+                $photos_stmt->execute();
+                $photos_result = $photos_stmt->get_result();
+                while ($photo = $photos_result->fetch_assoc()) {
+                    $oldPhotos[] = $photo['file_path'];
+                }
+
+                $uploadDir = __DIR__ . '/../uploads/activities';
+                $conn->begin_transaction();
+
+                try {
+                    $delete_stmt = $conn->prepare("DELETE FROM activity_photos WHERE activity_id = ?");
+                    $delete_stmt->bind_param("i", $activity_id);
+                    $delete_stmt->execute();
+
+                    foreach ($validatedPhotos['files'] as $photoFile) {
+                        $moved = image_upload_move_validated($photoFile, $uploadDir, 'uploads/activities', 'act');
+                        if (!$moved['ok']) {
+                            throw new RuntimeException($moved['error']);
+                        }
+
+                        $photo_sql  = "INSERT INTO activity_photos (activity_id, file_path, original_name) VALUES (?, ?, ?)";
+                        $photo_stmt = $conn->prepare($photo_sql);
+                        $photo_stmt->bind_param("iss", $activity_id, $moved['db_path'], $moved['original_name']);
+                        $photo_stmt->execute();
+                    }
+
+                    $conn->commit();
+                    foreach ($oldPhotos as $oldPath) {
+                        image_upload_delete_db_path($oldPath, __DIR__ . '/..');
+                    }
+                    $_SESSION['success'] = "Activity images updated successfully.";
+                } catch (Throwable $e) {
+                    $conn->rollback();
+                    $_SESSION['error'] = "Could not update activity images. Please try again.";
+                }
+            }
         }
     }
     
@@ -622,6 +693,12 @@ function getActivityStatusClass($status) {
                                                     <i class="fas fa-edit me-2"></i>Edit Activity
                                                 </a>
                                             </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reuploadActivityPhotosModal"
+                                                   onclick="setReuploadActivityId(<?= (int)$activity['id'] ?>); return false;">
+                                                    <i class="fas fa-image me-2"></i>Replace Images
+                                                </a>
+                                            </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <a class="dropdown-item text-danger" href="#"
@@ -787,14 +864,14 @@ function getActivityStatusClass($status) {
 
                         <!-- Photo Upload Field -->
                         <div class="mb-3">
-                            <label for="photos" class="form-label">Photos <span class="text-danger">*</span></label>
+                            <label for="photos" class="form-label">Photos <span class="text-danger">*</span> <small class="text-muted">(1-3, each <= 1MB)</small></label>
                             <input type="file" name="photos[]" id="photos" class="form-control" accept=".jpg,.jpeg,.png,.webp" multiple required>
-                            <div class="form-text">You must upload 1-3 images (JPG, PNG, WEBP). Total size should not exceed 5 MB.</div>
+                            <div class="form-text"><?= htmlspecialchars(IMAGE_UPLOAD_DISCLAIMER, ENT_QUOTES, 'UTF-8') ?></div>
                             
                             <!-- Note about converting photos -->
                             <div class="alert alert-info mt-2 p-2 small">
                                 <strong><i class="bi bi-info-circle me-1"></i>Having trouble uploading?</strong><br>
-                                If your photos won't upload, try compressing them.<br>
+                                If your photos are larger than 1MB, try compressing them.<br>
                                 You can compress your image at this website (https://imagecompressor.com/)
                             </div>
                             
@@ -911,6 +988,31 @@ function getActivityStatusClass($status) {
         </div>
     </div>
 
+    <div class="modal fade" id="reuploadActivityPhotosModal" tabindex="-1" aria-labelledby="reuploadActivityPhotosLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST" action="projects.php" enctype="multipart/form-data">
+                    <input type="hidden" name="activity_id" id="reupload_activity_id">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reuploadActivityPhotosLabel">Replace Activity Images</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label class="form-label">New Photos (1-3, JPG/PNG/WEBP, each <= 1MB)</label>
+                        <input type="file" name="photos[]" id="reupload_activity_photos" class="form-control" accept=".jpg,.jpeg,.png,.webp" multiple required>
+                        <div class="form-text"><?= htmlspecialchars(IMAGE_UPLOAD_DISCLAIMER, ENT_QUOTES, 'UTF-8') ?></div>
+                        <div id="reuploadActivityPreview" class="photo-preview mt-2"></div>
+                        <small class="text-muted d-block mt-2">Existing activity images will be replaced after you submit.</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="reupload_activity_photos" class="btn btn-primary">Replace Images</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Delete Confirmation Modal -->
     <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -1012,46 +1114,47 @@ function getActivityStatusClass($status) {
             statusFilter.addEventListener('change', filterActivities);
             approvalFilter.addEventListener('change', filterActivities);
 
-            // Photo preview for add modal
-            const photoInput = document.getElementById('photos');
-            const photoPreview = document.getElementById('photoPreview');
-            
-            if (photoInput) {
-                photoInput.addEventListener('change', function() {
-                    photoPreview.innerHTML = '';
-                    const files = Array.from(this.files || []).slice(0, 3);
-                    
-                    // Validate file count (at least 1, max 3)
-                    if (files.length < 1) {
-                        alert('Please upload at least one photo.');
-                        this.value = '';
-                        return;
-                    }
-                    
-                    if (files.length > 3) {
-                        alert('You can only upload up to 3 images.');
-                        this.value = '';
-                        return;
-                    }
-                    
-                    // Validate total size (5MB)
-                    const totalSize = files.reduce((total, file) => total + file.size, 0);
-                    if (totalSize > 5 * 1024 * 1024) {
-                        alert('Total file size must be less than 5 MB.');
-                        this.value = '';
-                        return;
-                    }
-                    
-                    files.forEach(file => {
-                        const url = URL.createObjectURL(file);
-                        const img = document.createElement('img');
-                        img.src = url;
-                        img.alt = 'Preview';
-                        img.onload = () => URL.revokeObjectURL(url);
-                        photoPreview.appendChild(img);
-                    });
+            function previewProjectImages(input, previewId) {
+                const preview = document.getElementById(previewId);
+                if (!preview) return;
+                preview.innerHTML = '';
+                const files = Array.from(input.files || []);
+
+                if (files.length < 1 || files.length > 3) {
+                    alert('Please upload between 1 and 3 images.');
+                    input.value = '';
+                    return;
+                }
+
+                if (files.some(file => file.size > 1024 * 1024)) {
+                    alert('Image size must be less than or equal to 1MB. Please compress the image and upload again.');
+                    input.value = '';
+                    return;
+                }
+
+                if (files.some(file => !['image/jpeg', 'image/png', 'image/webp'].includes(file.type))) {
+                    alert('Only JPG, JPEG, PNG, and WEBP images are allowed.');
+                    input.value = '';
+                    return;
+                }
+
+                files.forEach(file => {
+                    const url = URL.createObjectURL(file);
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = 'Preview';
+                    img.onload = () => URL.revokeObjectURL(url);
+                    preview.appendChild(img);
                 });
             }
+
+            document.getElementById('photos')?.addEventListener('change', function() {
+                previewProjectImages(this, 'photoPreview');
+            });
+
+            document.getElementById('reupload_activity_photos')?.addEventListener('change', function() {
+                previewProjectImages(this, 'reuploadActivityPreview');
+            });
 
             <?php if ($edit_activity_data): ?>
                 // Show edit modal if edit activity data is loaded
@@ -1086,6 +1189,10 @@ function getActivityStatusClass($status) {
             document.getElementById('delete_activity_name').textContent = activityName;
             const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
             deleteModal.show();
+        }
+
+        function setReuploadActivityId(activityId) {
+            document.getElementById('reupload_activity_id').value = activityId;
         }
         
         function closeEditModal() {

@@ -136,25 +136,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         --text-gray: #3E3E3E;
     }
 
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: linear-gradient(135deg, #e8f4fd 0%, #f0f8ff 100%);
-        color: var(--text-gray);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        padding-top: 80px;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)), url('https://ace-sedi.aiu.edu.my/assets/images/cfgs-pic.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 80px;
+        }
 
     .auth-container {
         max-width: 500px;
         margin: 2rem auto;
         padding: 3rem 2.5rem;
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 15px 40px rgba(26, 82, 118, 0.12);
-        width: 90%;
-    }
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(26, 82, 118, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.65);
+            width: 90%;
+        }
 
     .auth-header {
         text-align: center;

@@ -3,6 +3,7 @@
 // --- NO OUTPUT ABOVE THIS LINE ---
 
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/image_upload_helper.php';
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 // Admin gate (redirect before output)
@@ -24,49 +25,13 @@ function is_valid_year4($v){
 // Function to handle base64 image data from cropper
 function handleCroppedImage($base64_data, $user_id) {
     if (empty($base64_data)) return null;
-    
-    // Check if it's a base64 string
-    if (strpos($base64_data, 'data:image') === 0) {
-        $uploadRoot = __DIR__ . '/../uploads/profiles';
-        if (!is_dir($uploadRoot)) {
-            @mkdir($uploadRoot, 0755, true);
-        }
-        $uploadDir = realpath($uploadRoot);
-        
-        if ($uploadDir === false) return null;
-        
-        // Extract the base64 data
-        list($type, $data) = explode(';', $base64_data);
-        list(, $data) = explode(',', $data);
-        $data = base64_decode($data);
-        
-        // Determine file extension from mime type
-        $mime = str_replace('data:', '', $type);
-        $extensions = [
-            'image/jpeg' => 'jpg',
-            'image/png' => 'png',
-            'image/gif' => 'gif',
-            'image/webp' => 'webp'
-        ];
-        
-        $ext = $extensions[$mime] ?? 'jpg';
-        
-        // Validate image size (max 5MB)
-        if (strlen($data) > 5 * 1024 * 1024) {
-            return null;
-        }
-        
-        // Generate filename
-        $newName = 'profile_' . $user_id . '_' . time() . '_cropped.' . $ext;
-        $destPath = $uploadDir . DIRECTORY_SEPARATOR . $newName;
-        
-        // Save the file
-        if (file_put_contents($destPath, $data)) {
-            return '../uploads/profiles/' . $newName;
-        }
-    }
-    
-    return null;
+
+    return image_upload_base64_to_file(
+        $base64_data,
+        __DIR__ . '/../uploads/profiles',
+        '../uploads/profiles',
+        'profile_' . (int)$user_id
+    );
 }
 
 // CSRF
@@ -131,63 +96,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'save_
         if (!empty($_POST['cropped_image_data'])) {
             $profilePath = handleCroppedImage($_POST['cropped_image_data'], $admin_id);
             if ($profilePath === null) {
-                $errors[] = "Failed to process cropped image.";
+                $errors[] = IMAGE_UPLOAD_SIZE_ERROR;
             }
         }
         // Fallback to regular file upload if no cropped data
         else if (!empty($_FILES['profile_pic']['name'])) {
-            $uploadRoot = __DIR__ . '/../uploads/profiles';
-            if (!is_dir($uploadRoot)) {
-                @mkdir($uploadRoot, 0755, true);
-            }
-            $uploadDir = realpath($uploadRoot);
-
-            if ($uploadDir !== false) {
-                $fname  = $_FILES['profile_pic']['name'];
-                $tmp    = $_FILES['profile_pic']['tmp_name'];
-                $err    = $_FILES['profile_pic']['error'];
-                $size   = (int)$_FILES['profile_pic']['size'];
-
-                if ($err === UPLOAD_ERR_OK && is_uploaded_file($tmp)) {
-                    $ext = null;
-                    if (class_exists('finfo')) {
-                        $finfo = new finfo(FILEINFO_MIME_TYPE);
-                        $mime  = $finfo->file($tmp);
-                        $allowed = ['image/jpeg'=>'jpg','image/png'=>'png','image/gif'=>'gif','image/webp'=>'webp'];
-                        if (!isset($allowed[$mime])) {
-                            $errors[] = "Profile image must be JPG, PNG, GIF, or WEBP.";
-                        } else {
-                            $ext = $allowed[$mime];
-                        }
-                    } else {
-                        $extGuess = strtolower(pathinfo($fname, PATHINFO_EXTENSION));
-                        if (in_array($extGuess, ['jpg','jpeg','png','gif','webp'], true)) {
-                            $ext = $extGuess === 'jpeg' ? 'jpg' : $extGuess;
-                        } else {
-                            $errors[] = "Profile image must be JPG, PNG, GIF, or WEBP.";
-                        }
-                    }
-
-                    if (!$errors) {
-                        if ($size > 5*1024*1024) {
-                            $errors[] = "Profile image must be 5MB or smaller.";
-                        } else {
-                            $safeBase = preg_replace('/[^A-Za-z0-9_\-]/','_', pathinfo($fname, PATHINFO_FILENAME));
-                            $newName  = 'profile_'.$admin_id.'_'.time().'_'.$safeBase.'.'.$ext;
-                            $destPath = $uploadDir . DIRECTORY_SEPARATOR . $newName;
-                            if (move_uploaded_file($tmp, $destPath)) {
-                                // Store relative path used across app
-                                $profilePath = '../uploads/profiles/' . $newName;
-                            } else {
-                                $errors[] = "Failed to store uploaded image.";
-                            }
-                        }
-                    }
-                } else {
-                    $errors[] = "Image upload error (code $err).";
-                }
+            $validated = image_upload_validate_file($_FILES['profile_pic']);
+            if (!$validated['ok']) {
+                $errors[] = $validated['error'] ?: "Invalid profile image.";
             } else {
-                $errors[] = "Upload directory not available.";
+                $moved = image_upload_move_validated($validated, __DIR__ . '/../uploads/profiles', '../uploads/profiles', 'profile_' . $admin_id);
+                if ($moved['ok']) {
+                    $profilePath = $moved['db_path'];
+                } else {
+                    $errors[] = $moved['error'];
+                }
             }
         }
 
@@ -378,6 +301,7 @@ $profilePhoto = !empty($me['profile_pic']) ? $me['profile_pic'] : '../uploads/de
                             <i class="fas fa-camera"></i>
                         </label>
                     </div>
+                    <small class="text-muted d-block text-center mb-3"><?= h(IMAGE_UPLOAD_DISCLAIMER) ?></small>
 
                     <form method="post" enctype="multipart/form-data" class="row g-3" id="profileForm">
                         <input type="hidden" name="csrf_token" value="<?= h($csrf_token) ?>">
@@ -546,6 +470,17 @@ const preview = document.querySelector('.cropper-preview');
 // Profile picture upload trigger
 profilePicInput?.addEventListener('change', function(){
     if (this.files && this.files[0]) {
+        const file = this.files[0];
+        if (file.size > 1024 * 1024) {
+            alert('Image size must be less than or equal to 1MB. Please compress the image and upload again.');
+            this.value = '';
+            return;
+        }
+        if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+            alert('Only JPG, JPEG, PNG, and WEBP images are allowed.');
+            this.value = '';
+            return;
+        }
         const reader = new FileReader();
         reader.onload = function(e){
             imageToCrop.src = e.target.result;

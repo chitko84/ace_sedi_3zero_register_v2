@@ -92,6 +92,12 @@ function cluster_badge_class($cluster_value) {
             return 'secondary';
     }
 }
+
+$approval_status = strtolower(trim((string)($club['approval_status'] ?? $club['status'] ?? 'pending')));
+$is_approved = ($approval_status === 'approved');
+$certificate_club_id = !empty($club['club_identifier']) ? $club['club_identifier'] : $club['id'];
+$registration_timestamp = !empty($club['date_of_registration']) ? strtotime($club['date_of_registration']) : false;
+$certificate_registration_date = $registration_timestamp ? date('F j, Y', $registration_timestamp) : 'Date not available';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -102,6 +108,179 @@ function cluster_badge_class($cluster_value) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="../uploads/aiu_logo.png" type="image/x-icon">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --cert-blue: #1a5276;
+            --cert-blue-dark: #154360;
+            --cert-gold: #c9952c;
+        }
+        .certificate-shell {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(21, 67, 96, .12);
+            padding: 1.25rem;
+            margin: 1.5rem 0 2rem;
+        }
+        .certificate-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .certificate-paper {
+            position: relative;
+            background: #fff;
+            border: 10px solid var(--cert-blue);
+            outline: 2px solid var(--cert-gold);
+            outline-offset: -18px;
+            padding: 2.25rem;
+            min-height: 680px;
+            overflow: hidden;
+        }
+        .certificate-paper::before {
+            content: "";
+            position: absolute;
+            inset: 22px;
+            border: 1px solid rgba(201, 149, 44, .45);
+            pointer-events: none;
+        }
+        .certificate-logos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .certificate-logo {
+            max-height: 86px;
+            max-width: 150px;
+            object-fit: contain;
+        }
+        .certificate-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+        .certificate-title {
+            color: var(--cert-blue-dark);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            font-weight: 700;
+            letter-spacing: .02em;
+            margin-bottom: 1.5rem;
+        }
+        .certificate-subtitle {
+            color: #5c6670;
+            font-size: 1.15rem;
+            margin-bottom: 1rem;
+        }
+        .certificate-club-name {
+            color: var(--cert-blue);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(1.7rem, 4vw, 2.7rem);
+            font-weight: 700;
+            border-bottom: 2px solid rgba(201, 149, 44, .75);
+            display: inline-block;
+            padding: .25rem 1.75rem .5rem;
+            margin-bottom: 1.5rem;
+        }
+        .certificate-statement {
+            color: #2f3a43;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        .certificate-details {
+            display: inline-grid;
+            gap: .5rem;
+            text-align: left;
+            background: #f8fbfd;
+            border: 1px solid #e6eef4;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: .5rem auto 2rem;
+            min-width: min(100%, 420px);
+        }
+        .certificate-detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+        .certificate-detail-row strong {
+            color: var(--cert-blue-dark);
+        }
+        .certificate-footer {
+            color: var(--cert-blue-dark);
+            font-weight: 700;
+            margin-top: 2rem;
+        }
+        .certificate-note {
+            border-left: 4px solid #f39c12;
+            background: #fff8e8;
+            color: #795200;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0 2rem;
+        }
+        @media (max-width: 767.98px) {
+            .certificate-paper {
+                padding: 1.35rem;
+                border-width: 7px;
+                outline-offset: -13px;
+                min-height: auto;
+            }
+            .certificate-logos {
+                margin-bottom: 1.25rem;
+            }
+            .certificate-logo {
+                max-height: 64px;
+                max-width: 110px;
+            }
+            .certificate-detail-row {
+                flex-direction: column;
+                gap: .1rem;
+            }
+        }
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm;
+            }
+            body * {
+                visibility: hidden !important;
+            }
+            #certificate, #certificate * {
+                visibility: visible !important;
+            }
+            #certificate {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+            }
+            .certificate-actions,
+            .no-print {
+                display: none !important;
+            }
+            .certificate-shell {
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+            .certificate-paper {
+                min-height: 270mm;
+                box-shadow: none !important;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+    </style>
 </head>
 <body>
     <?php include('header.php'); ?>
@@ -256,6 +435,11 @@ function cluster_badge_class($cluster_value) {
                             <a href="myclubs.php" class="btn btn-outline-primary">
                                 <i class="fas fa-arrow-left me-2"></i>Back to My Clubs
                             </a>
+                            <?php if ($is_approved): ?>
+                            <a href="#certificate" class="btn btn-outline-success">
+                                <i class="fas fa-certificate me-2"></i>View Certificate
+                            </a>
+                            <?php endif; ?>
                             <?php if ($club['status'] === 'pending' || $club['status'] === 'rejected'): ?>
                             <a href="edit_club.php?id=<?= (int)$club['id'] ?>" class="btn btn-outline-warning">
                                 <i class="fas fa-edit me-2"></i>Edit Club
@@ -293,6 +477,62 @@ function cluster_badge_class($cluster_value) {
                 <!-- /optional -->
             </div>
         </div>
+
+        <?php if ($is_approved): ?>
+        <section id="certificate" class="certificate-shell">
+            <div class="certificate-actions no-print">
+                <div>
+                    <h2 class="h4 mb-1">Approved Club Certificate</h2>
+                    <p class="text-muted mb-0">Use your browser print dialog to save this certificate as PDF.</p>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="window.print()">
+                    <i class="fas fa-print me-2"></i>Download / Print Certificate
+                </button>
+            </div>
+
+            <div class="certificate-paper">
+                <div class="certificate-logos">
+                    <img src="../uploads/aiu_logo.png" class="certificate-logo" alt="Albukhary International University logo">
+                    <img src="../uploads/3 zero club logo.png" class="certificate-logo" alt="3ZERO Club logo">
+                </div>
+
+                <div class="certificate-content">
+                    <div class="certificate-title">Certificate of 3ZERO Club Registration</div>
+                    <p class="certificate-subtitle">This certifies that</p>
+
+                    <div class="certificate-club-name">
+                        <?= e($club['group_name']) ?> - <?= e($certificate_club_id) ?>
+                    </div>
+
+                    <p class="certificate-statement">
+                        has been officially registered under the<br>
+                        <strong>AIU 3ZERO Club Registration System</strong>
+                    </p>
+
+                    <div class="certificate-details">
+                        <div class="certificate-detail-row">
+                            <strong>Cluster:</strong>
+                            <span><?= e($club['cluster'] ?: 'Not specified') ?></span>
+                        </div>
+                        <div class="certificate-detail-row">
+                            <strong>Registration Date:</strong>
+                            <span><?= e($certificate_registration_date) ?></span>
+                        </div>
+                    </div>
+
+                    <div class="certificate-footer">
+                        <div>Albukhary International University</div>
+                        <div>3ZERO Club Management System</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <?php else: ?>
+        <div class="certificate-note no-print">
+            <strong>Certificate will be available after the club is approved.</strong>
+            <div class="small mt-1">Current status: <?= e(ucfirst($approval_status ?: 'pending')) ?></div>
+        </div>
+        <?php endif; ?>
     </div>
 
     <?php include('footer.php'); ?>

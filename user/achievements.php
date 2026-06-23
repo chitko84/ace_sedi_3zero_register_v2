@@ -7,6 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once '../includes/db.php';
+require_once __DIR__ . '/../includes/image_upload_helper.php';
 
 // Require auth
 if (!isset($_SESSION['user_id'])) {
@@ -93,6 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($files && is_array($files['name'])) {
             for ($i=0;$i<count($files['name']);$i++) {
                 if ($files['error'][$i]===UPLOAD_ERR_OK && $files['size'][$i]>0) {
+                    if ((int)$files['size'][$i] > IMAGE_UPLOAD_MAX_BYTES) {
+                        $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
+                        header("Location: achievements.php");
+                        exit();
+                    }
                     $fileCount++;
                     $totalBytes += (int)$files['size'][$i];
                 }
@@ -104,8 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: achievements.php");
             exit();
         }
-        if ($totalBytes > 10*1024*1024) {
-            $_SESSION['error'] = "Total upload size must be ≤ 10MB. You can compress your image here (https://imagecompressor.com/)";
+        if ($totalBytes > 3 * IMAGE_UPLOAD_MAX_BYTES) {
+            $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
             header("Location: achievements.php");
             exit();
         }
@@ -134,6 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($files['error'][$i] !== UPLOAD_ERR_OK) continue;
 
             $tmp = $files['tmp_name'][$i];
+            if ((int)$files['size'][$i] > IMAGE_UPLOAD_MAX_BYTES) {
+                $conn->query("DELETE FROM achievements WHERE id=$achievement_id");
+                $_SESSION['error'] = IMAGE_UPLOAD_SIZE_ERROR;
+                header("Location: achievements.php");
+                exit();
+            }
             $mime = $finfo->file($tmp);
             $fileExt = strtolower(pathinfo($files['name'][$i], PATHINFO_EXTENSION));
 
@@ -218,6 +230,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $up->close();
 
         $_SESSION['success'] = "Achievement updated. Resubmitted for approval.";
+        header("Location: achievements.php");
+        exit();
+    }
+
+    if (isset($_POST['reupload_achievement_photos'])) {
+        $achievement_id = (int)($_POST['achievement_id'] ?? 0);
+
+        $own = $conn->prepare("SELECT id FROM achievements WHERE id=? AND created_by=? LIMIT 1");
+        $own->bind_param("ii", $achievement_id, $user_id);
+        $own->execute();
+        if ($own->get_result()->num_rows === 0) {
+            $_SESSION['error'] = "You cannot replace images for this achievement.";
+            header("Location: achievements.php");
+            exit();
+        }
+        $own->close();
+
+        $validatedPhotos = image_upload_validate_many($_FILES['photos'] ?? [], 1, 3);
+        if (!$validatedPhotos['ok']) {
+            $_SESSION['error'] = $validatedPhotos['error'];
+            header("Location: achievements.php");
+            exit();
+        }
+
+        $oldPhotos = [];
+        $old = $conn->prepare("SELECT file_path FROM achievement_photos WHERE achievement_id=?");
+        $old->bind_param("i", $achievement_id);
+        $old->execute();
+        $oldResult = $old->get_result();
+        while ($row = $oldResult->fetch_assoc()) {
+            $oldPhotos[] = $row['file_path'];
+        }
+
+        $uploadDir = __DIR__ . '/../uploads/achievements';
+        $conn->begin_transaction();
+
+        try {
+            $del = $conn->prepare("DELETE FROM achievement_photos WHERE achievement_id=?");
+            $del->bind_param("i", $achievement_id);
+            $del->execute();
+
+            foreach ($validatedPhotos['files'] as $photoFile) {
+                $moved = image_upload_move_validated($photoFile, $uploadDir, 'uploads/achievements', 'ach');
+                if (!$moved['ok']) {
+                    throw new RuntimeException($moved['error']);
+                }
+
+                $ph = $conn->prepare("INSERT INTO achievement_photos (achievement_id, file_path, original_name) VALUES (?, ?, ?)");
+                $ph->bind_param("iss", $achievement_id, $moved['db_path'], $moved['original_name']);
+                $ph->execute();
+            }
+
+            $conn->commit();
+            foreach ($oldPhotos as $oldPath) {
+                image_upload_delete_db_path($oldPath, __DIR__ . '/..');
+            }
+            $_SESSION['success'] = "Achievement images updated successfully.";
+        } catch (Throwable $e) {
+            $conn->rollback();
+            $_SESSION['error'] = "Could not update achievement images. Please try again.";
+        }
+
         header("Location: achievements.php");
         exit();
     }
@@ -475,6 +549,13 @@ body { background:#f8f9fa; }
                     onclick="setDeleteId(<?= (int)$a['id'] ?>)">
                     <i class="bi bi-trash"></i>
                 </button>
+
+                <button class="btn btn-outline-success btn-sm"
+                    data-bs-toggle="modal"
+                    data-bs-target="#reuploadAchievementPhotosModal"
+                    onclick="setReuploadAchievementId(<?= (int)$a['id'] ?>)">
+                    <i class="bi bi-image"></i>
+                </button>
             </div>
             <?php endif; ?>
 
@@ -564,9 +645,9 @@ body { background:#f8f9fa; }
                 </div>
 
                 <div class="col-12">
-                    <label class="form-label">Photos (1-3)</label>
+                    <label class="form-label">Photos (1-3, JPG/PNG/WEBP, each <= 1MB)</label>
                     <input type="file" name="photos[]" id="photos" class="form-control" multiple required accept=".jpg,.jpeg,.png,.webp,.JPG,.JPEG,.PNG,.WEBP">
-                    <div class="form-text">Max total size: 10MB. Allowed formats: JPG, PNG, WEBP</div>
+                    <div class="form-text"><?= htmlspecialchars(IMAGE_UPLOAD_DISCLAIMER, ENT_QUOTES, 'UTF-8') ?></div>
                     <div id="preview" class="d-flex gap-2 mt-2 flex-wrap"></div>
                 </div>
 
@@ -638,6 +719,32 @@ body { background:#f8f9fa; }
   </div>
 </div>
 
+<!-- REUPLOAD PHOTOS MODAL -->
+<div class="modal fade" id="reuploadAchievementPhotosModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="achievement_id" id="reupload_achievement_id">
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">Replace Achievement Images</h5>
+          <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label">New Photos (1-3, JPG/PNG/WEBP, each <= 1MB)</label>
+          <input type="file" name="photos[]" id="reupload_achievement_photos" class="form-control" multiple required accept=".jpg,.jpeg,.png,.webp,.JPG,.JPEG,.PNG,.WEBP">
+          <div class="form-text"><?= htmlspecialchars(IMAGE_UPLOAD_DISCLAIMER, ENT_QUOTES, 'UTF-8') ?></div>
+          <div id="reuploadAchievementPreview" class="d-flex gap-2 mt-2 flex-wrap"></div>
+          <small class="text-muted d-block mt-2">Existing achievement images will be replaced after you submit.</small>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
+          <button class="btn btn-success" name="reupload_achievement_photos">Replace Images</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- DELETE MODAL -->
 <div class="modal fade" id="deleteAchievementModal" tabindex="-1">
   <div class="modal-dialog">
@@ -668,15 +775,26 @@ body { background:#f8f9fa; }
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// Client-side preview
-document.getElementById('photos')?.addEventListener('change', function() {
-    const preview = document.getElementById('preview');
+function previewAchievementImages(input, previewId) {
+    const preview = document.getElementById(previewId);
     preview.innerHTML = '';
-    const files = [...this.files];
+    const files = [...input.files];
 
-    if (files.length > 3) {
-        this.value = "";
-        preview.innerHTML = "<span class='text-danger'>You can upload maximum 3 images.</span>";
+    if (files.length < 1 || files.length > 3) {
+        input.value = "";
+        preview.innerHTML = "<span class='text-danger'>Please upload between 1 and 3 images.</span>";
+        return;
+    }
+
+    if (files.some(file => file.size > 1024 * 1024)) {
+        input.value = "";
+        preview.innerHTML = "<span class='text-danger'>Image size must be less than or equal to 1MB. Please compress the image and upload again.</span>";
+        return;
+    }
+
+    if (files.some(file => !['image/jpeg', 'image/png', 'image/webp'].includes(file.type))) {
+        input.value = "";
+        preview.innerHTML = "<span class='text-danger'>Only JPG, JPEG, PNG, and WEBP images are allowed.</span>";
         return;
     }
 
@@ -688,8 +806,18 @@ document.getElementById('photos')?.addEventListener('change', function() {
         img.style.height="90px";
         img.style.objectFit="cover";
         img.style.borderRadius="6px";
+        img.onload = () => URL.revokeObjectURL(url);
         preview.appendChild(img);
     });
+}
+
+// Client-side preview
+document.getElementById('photos')?.addEventListener('change', function() {
+    previewAchievementImages(this, 'preview');
+});
+
+document.getElementById('reupload_achievement_photos')?.addEventListener('change', function() {
+    previewAchievementImages(this, 'reuploadAchievementPreview');
 });
 
 // Edit form helper
@@ -704,6 +832,10 @@ function setEditForm(id, title, description, clubId, achievedOn) {
 // Delete form helper
 function setDeleteId(id){
     document.getElementById('delete_achievement_id').value = id;
+}
+
+function setReuploadAchievementId(id){
+    document.getElementById('reupload_achievement_id').value = id;
 }
 </script>
 

@@ -385,6 +385,7 @@ function pendingBadge($count) {
 
         <li class="mt-2 px-3 text-uppercase text-white-50 small">Management</li>
         <li><a href="manage_users.php" class="<?= active('manage_users.php') ?>"><i class="fa-solid fa-users-gear"></i> Users</a></li>
+        <li><a href="admins.php" class="<?= active('admins.php') ?>"><i class="fa-solid fa-user-shield"></i> Admins</a></li>
         <li><a href="users_by_club_status.php" class="<?= active('users_by_club_status.php') ?>"><i class="fa-solid fa-user-check"></i> Users by Club Status</a></li>
         <li><a href="filter_by_semester.php" class="<?= active('filter_by_semester.php') ?>"><i class="fa-solid fa-calendar-week"></i> Filter by Semester</a></li>
         <li><a href="manage_clubs.php" class="<?= active('manage_clubs.php') ?>"><i class="fa-solid fa-people-group"></i> Clubs
@@ -404,6 +405,7 @@ function pendingBadge($count) {
         <li><a href="notifications.php" class="<?= active('notifications.php') ?>"><i class="fa-regular fa-bell"></i> Notifications</a></li>
 
         <li class="mt-2 px-3 text-uppercase text-white-50 small">System</li>
+        <li><a href="backup.php" class="<?= active('backup.php') ?>"><i class="fa-solid fa-database"></i> Backup Management</a></li>
         <li><a href="settings.php" class="<?= active('settings.php') ?>"><i class="fa-solid fa-sliders"></i> Settings</a></li>
         <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket fa-rotate-180"></i> Logout</a></li>
     </ul>

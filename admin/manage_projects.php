@@ -5,10 +5,19 @@ require_once __DIR__ . '/header.php'; // enforces admin auth and opens $conn
 $q        = isset($_GET['q']) ? trim($_GET['q']) : '';
 $club_id  = isset($_GET['club_id']) ? (int)$_GET['club_id'] : 0;
 $approval = isset($_GET['approval_status']) ? trim($_GET['approval_status']) : '';
+$status_filter = isset($_GET['status']) ? trim($_GET['status']) : 'all';
 $year     = isset($_GET['year']) ? (int)$_GET['year'] : 0;
 $month    = isset($_GET['month']) ? (int)$_GET['month'] : 0;
 $page     = max(1, (int)($_GET['page'] ?? 1));
 $perPage  = min(100, max(5, (int)($_GET['per_page'] ?? 10)));
+
+$allowed_statuses = ['pending', 'approved', 'rejected'];
+if (!in_array($status_filter, array_merge(['all'], $allowed_statuses), true)) {
+    $status_filter = 'all';
+}
+if ($approval === '' && $status_filter !== 'all') {
+    $approval = $status_filter;
+}
 
 $where  = " WHERE 1=1 ";
 $params = [];
@@ -95,6 +104,7 @@ while ($row = $res->fetch_assoc()) $rows[] = $row;
 function h($v){ return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 function qs(array $o=[]){ return '?'.http_build_query(array_merge($_GET,$o)); }
 function apprClass($s){ return $s==='approved'?'success':($s==='rejected'?'danger':'warning'); }
+function statusFilterLabel($s){ return $s === 'all' ? 'All Projects' : ucfirst($s) . ' Projects'; }
 function statusClass($s){ 
     switch($s) {
         case 'completed': return 'success';
@@ -219,12 +229,12 @@ function statusClass($s){
                 </select>
             </div>
             <div class="col-lg-2">
-                <label class="form-label">Approval</label>
-                <select name="approval_status" class="form-select">
-                    <option value="">All</option>
-                    <option value="pending"  <?= $approval==='pending'?'selected':''; ?>>Pending</option>
-                    <option value="approved" <?= $approval==='approved'?'selected':''; ?>>Approved</option>
-                    <option value="rejected" <?= $approval==='rejected'?'selected':''; ?>>Rejected</option>
+                <label class="form-label">Filter by Status</label>
+                <select name="status" class="form-select">
+                    <option value="all" <?= $status_filter==='all'?'selected':''; ?>>All</option>
+                    <option value="pending"  <?= $status_filter==='pending'?'selected':''; ?>>Pending</option>
+                    <option value="approved" <?= $status_filter==='approved'?'selected':''; ?>>Approved</option>
+                    <option value="rejected" <?= $status_filter==='rejected'?'selected':''; ?>>Rejected</option>
                 </select>
             </div>
             <div class="col-lg-2">
@@ -235,15 +245,19 @@ function statusClass($s){
                 <label class="form-label">Month</label>
                 <input type="number" name="month" class="form-control" min="1" max="12" value="<?= $month ?: '' ?>">
             </div>
-            <div class="col-lg-2 d-flex align-items-end">
-                <button class="btn btn-success w-100"><i class="fa-solid fa-filter me-1"></i> Apply</button>
+            <div class="col-lg-2 d-flex align-items-end gap-2">
+                <button class="btn btn-success flex-fill"><i class="fa-solid fa-filter me-1"></i> Filter</button>
+                <a href="manage_projects.php" class="btn btn-light flex-fill"><i class="fa-solid fa-rotate-left me-1"></i> Reset</a>
             </div>
         </form>
     </div>
 
     <div class="card shadow-sm border-0">
-        <div class="card-header bg-white d-flex justify-content-between">
-            <div><strong>Activity Results</strong> <span class="text-muted">(<?= number_format($total) ?> found)</span></div>
+        <div class="card-header bg-white d-flex justify-content-between flex-wrap gap-2">
+            <div>
+                <strong>Activity Results</strong> <span class="text-muted">(<?= number_format($total) ?> found)</span>
+                <span class="badge bg-light text-dark border ms-2">Showing: <?= h(statusFilterLabel($status_filter)) ?></span>
+            </div>
             <div class="small text-muted">Page <?= $page ?> of <?= $totalPages ?></div>
         </div>
         <div class="table-responsive">

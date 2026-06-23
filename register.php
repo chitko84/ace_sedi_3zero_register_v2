@@ -6,6 +6,7 @@ ini_set('display_startup_errors', 1);
 session_start();
 
 include 'includes/db.php';
+require_once __DIR__ . '/includes/image_upload_helper.php';
 
 $old = $_SESSION['old'] ?? [];
 unset($_SESSION['old']);
@@ -106,50 +107,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         is_uploaded_file($_FILES['profile_pic']['tmp_name']) &&
         $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK
     ) {
-        $allowedExt = ['jpg', 'jpeg', 'png', 'webp'];
-        $allowedMime = ['image/jpeg', 'image/png', 'image/webp'];
-        $maxBytes = 5 * 1024 * 1024;
-
-        $origName = $_FILES['profile_pic']['name'];
-        $tmpPath = $_FILES['profile_pic']['tmp_name'];
-        $size = $_FILES['profile_pic']['size'];
-        $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
-
-        if (!in_array($ext, $allowedExt, true)) {
-            redirectWithError("Only JPG, PNG or WEBP images are allowed.");
-        }
-
-        if ($size > $maxBytes) {
-            redirectWithError("Image too large (max 5 MB).");
-        }
-
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mime = $finfo->file($tmpPath);
-
-        if (!in_array($mime, $allowedMime, true)) {
-            redirectWithError("Invalid image type.");
-        }
-
-        if (@getimagesize($tmpPath) === false) {
-            redirectWithError("Invalid image file.");
+        $validated = image_upload_validate_file($_FILES['profile_pic']);
+        if (!$validated['ok']) {
+            redirectWithError($validated['error'] ?: "Invalid image file.");
         }
 
         $upload_dir = __DIR__ . '/uploads/profiles/';
-
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0755, true);
+        $moved = image_upload_move_validated($validated, $upload_dir, 'uploads/profiles', 'profile');
+        if (!$moved['ok']) {
+            redirectWithError($moved['error'] ?: "Failed to upload profile picture.");
         }
 
-        $filename = bin2hex(random_bytes(8)) . '.' . $ext;
-
-        if (!move_uploaded_file($tmpPath, $upload_dir . $filename)) {
-            redirectWithError("Failed to upload profile picture.");
-        }
-
-        $profile_pic = 'uploads/profiles/' . $filename;
+        $profile_pic = $moved['db_path'];
 
     } else {
-        redirectWithError("Please upload your profile picture (max 5 MB).");
+        redirectWithError("Please upload your profile picture. " . IMAGE_UPLOAD_SIZE_ERROR);
     }
 
     $role = 'user';
@@ -788,13 +760,14 @@ body {
 
                 <div class="row">
                     <div class="col-md-12 mb-3">
-                        <label for="profile_pic" class="form-label required">Upload Your Image <small class="text-muted">(less than 5 MB)</small></label>
+                        <label for="profile_pic" class="form-label required">Upload Your Image <small class="text-muted">(JPG, PNG, WEBP, max 1MB)</small></label>
                         <label for="profile_pic" style="color:green;">Disclaimer: Please ensure that you upload your own photo. Do not upload photos of other individuals.</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class="bi bi-image"></i></span>
                             <input type="file" class="form-control" id="profile_pic" name="profile_pic" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" required>
                         </div>
-                        <small class="text-muted">Accepted: JPG, PNG, WEBP Max size: 5 MB. You must reselect the image after an error.</small>
+                        <small class="text-muted"><?= htmlspecialchars(IMAGE_UPLOAD_DISCLAIMER, ENT_QUOTES, 'UTF-8') ?> You must reselect the image after an error.</small>
+                        <div id="profilePicPreview" class="mt-2"></div>
                     </div>
                 </div>
             </div>
@@ -1090,6 +1063,35 @@ document.getElementById('password').addEventListener('input', function() {
     } else {
         strengthBar.style.backgroundColor = '#28a745';
     }
+});
+
+document.getElementById('profile_pic')?.addEventListener('change', function() {
+    const preview = document.getElementById('profilePicPreview');
+    preview.innerHTML = '';
+    const file = this.files && this.files[0] ? this.files[0] : null;
+    if (!file) return;
+
+    if (file.size > 1024 * 1024) {
+        preview.innerHTML = '<small class="text-danger">Image size must be less than or equal to 1MB. Please compress the image and upload again.</small>';
+        this.value = '';
+        return;
+    }
+
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+        preview.innerHTML = '<small class="text-danger">Only JPG, JPEG, PNG, and WEBP images are allowed.</small>';
+        this.value = '';
+        return;
+    }
+
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.alt = 'Selected profile preview';
+    img.style.maxWidth = '140px';
+    img.style.maxHeight = '140px';
+    img.style.objectFit = 'cover';
+    img.style.borderRadius = '10px';
+    img.onload = () => URL.revokeObjectURL(img.src);
+    preview.appendChild(img);
 });
 
 const menuToggle = document.getElementById('menuToggle');

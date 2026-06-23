@@ -12,6 +12,43 @@ $user_id = (int)$_SESSION['user_id'];
 $clubs = [];
 $user_email = '';
 
+function h($value) {
+    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+}
+
+function clubTimelineStatusClass($status) {
+    $status = strtolower(trim((string)$status));
+    if ($status === 'approved') return 'approved';
+    if ($status === 'rejected') return 'rejected';
+    return 'pending';
+}
+
+function clubTimelineRoleLabel($memberType) {
+    $memberType = strtolower(trim((string)$memberType));
+    if ($memberType === 'key_person') return 'Key Person';
+    if ($memberType === 'deputy') return 'Deputy Key Person';
+    if ($memberType === 'member') return 'Regular Member';
+    return ucwords(str_replace('_', ' ', $memberType ?: 'Member'));
+}
+
+function clubTimelineDateValue(array $club) {
+    $date = trim((string)($club['date_of_registration'] ?? ''));
+    if ($date === '' || $date === '0000-00-00') {
+        $date = trim((string)($club['created_at'] ?? ''));
+    }
+    return $date;
+}
+
+function clubTimelineDateLabel(array $club) {
+    $date = clubTimelineDateValue($club);
+    $timestamp = $date !== '' ? strtotime($date) : false;
+    return $timestamp ? date('M j, Y', $timestamp) : 'Date not available';
+}
+
+function clubApprovalStatus(array $club) {
+    return strtolower(trim((string)($club['approval_status'] ?? $club['status'] ?? 'pending')));
+}
+
 // First, get the user's email from the users table
 $user_sql = "SELECT email FROM users WHERE id = ?";
 $user_stmt = $conn->prepare($user_sql);
@@ -147,6 +184,128 @@ if (isset($_GET['delete_club']) && $user_email !== '') {
         .club-meta-row { display:flex; justify-content:space-between; gap:1rem; padding:.55rem .7rem; border-radius:8px; background:#f8fafc; }
         .club-meta-row strong { color:var(--primary); }
         .filter-actions { display:flex; gap:.5rem; flex-wrap:wrap; }
+        .timeline-section {
+            background: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .timeline-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+        .timeline-heading h2 {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .club-timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .club-timeline::before {
+            content: "";
+            position: absolute;
+            left: .55rem;
+            top: .3rem;
+            bottom: .3rem;
+            width: 3px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, var(--primary), rgba(26, 82, 118, .18));
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -1.72rem;
+            top: 1rem;
+            width: 1.05rem;
+            height: 1.05rem;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 4px rgba(26, 82, 118, .12);
+        }
+        .timeline-dot.pending { background: var(--accent); box-shadow: 0 0 0 4px rgba(243, 156, 18, .18); }
+        .timeline-dot.approved { background: var(--secondary); box-shadow: 0 0 0 4px rgba(40, 180, 99, .18); }
+        .timeline-dot.rejected { background: #dc3545; box-shadow: 0 0 0 4px rgba(220, 53, 69, .16); }
+        .timeline-card {
+            border: 1px solid #eef2f7;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            background: linear-gradient(180deg, #fff, #fbfdff);
+            transition: var(--transition);
+        }
+        .timeline-card:hover {
+            border-color: rgba(26, 82, 118, .2);
+            box-shadow: 0 8px 18px rgba(26, 82, 118, .08);
+        }
+        .timeline-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: .75rem;
+            margin-bottom: .55rem;
+        }
+        .timeline-date {
+            color: var(--gray);
+            font-size: .86rem;
+            font-weight: 600;
+        }
+        .timeline-title {
+            margin: .15rem 0 0;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        .timeline-description {
+            color: #52606d;
+            margin-bottom: .75rem;
+        }
+        .timeline-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+        .timeline-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            padding: .35rem .6rem;
+            border-radius: 999px;
+            background: #f4f7fb;
+            color: #52606d;
+            font-size: .82rem;
+            font-weight: 600;
+        }
+        .timeline-status {
+            border-radius: 999px;
+            padding: .35rem .65rem;
+            font-size: .78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .02em;
+            white-space: nowrap;
+        }
+        .timeline-status.pending { background: #fff4df; color: #9a5b00; }
+        .timeline-status.approved { background: #e7f7ed; color: #146c3c; }
+        .timeline-status.rejected { background: #fdecee; color: #a71d2a; }
+        .timeline-empty {
+            border: 1px dashed #d7dee8;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            color: var(--gray);
+            background: #fbfdff;
+        }
         @media (max-width: 767.98px) {
             .page-header { text-align:left!important; }
             .search-container { padding:1rem; }
@@ -158,6 +317,12 @@ if (isset($_GET['delete_club']) && $user_email !== '') {
             .stat-number { font-size:1rem; }
             .action-buttons { flex-direction:column; }
             .club-meta-row { flex-direction:column; gap:.15rem; }
+            .timeline-section { padding:1rem; }
+            .timeline-heading { align-items:flex-start; flex-direction:column; }
+            .club-timeline { padding-left:1.6rem; }
+            .club-timeline::before { left:.42rem; }
+            .timeline-dot { left:-1.48rem; }
+            .timeline-card-top { flex-direction:column; }
         }
     </style>
 </head>
@@ -362,6 +527,11 @@ if (isset($_GET['delete_club']) && $user_email !== '') {
                                     <a href="club_details.php?id=<?= (int)$club['id'] ?>" class="btn btn-outline-primary btn-sm flex-fill">
                                         <i class="fas fa-eye me-1"></i>View
                                     </a>
+                                    <?php if (clubApprovalStatus($club) === 'approved'): ?>
+                                    <a href="club_details.php?id=<?= (int)$club['id'] ?>#certificate" class="btn btn-outline-success btn-sm flex-fill">
+                                        <i class="fas fa-certificate me-1"></i>View Certificate
+                                    </a>
+                                    <?php endif; ?>
                                     <a href="edit_club.php?id=<?= (int)$club['id'] ?>" class="btn btn-outline-secondary btn-sm flex-fill">
                                         <i class="fas fa-edit me-1"></i>Edit
                                     </a>
@@ -372,6 +542,80 @@ if (isset($_GET['delete_club']) && $user_email !== '') {
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
+
+        <!-- Club Registration Timeline -->
+        <section class="timeline-section" aria-labelledby="clubTimelineTitle">
+            <div class="timeline-heading">
+                <div>
+                    <h2 class="h4 mb-1" id="clubTimelineTitle">
+                        <i class="bi bi-clock-history me-2"></i>Club Registration Timeline
+                    </h2>
+                    <p class="text-muted mb-0">Track the registration progress and history for clubs connected to your account.</p>
+                </div>
+                <a href="club_registration.php" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-plus me-1"></i>Register a Club
+                </a>
+            </div>
+
+            <?php if (empty($clubs)): ?>
+                <div class="timeline-empty">
+                    <i class="bi bi-calendar2-x d-block mb-2" style="font-size:2rem;color:var(--gray-light);"></i>
+                    <h3 class="h5 mb-2">No club registration timeline available yet.</h3>
+                    <p class="mb-3">Your club registration history will appear here after you register or join a club.</p>
+                    <a href="club_registration.php" class="btn btn-primary btn-sm">Register a Club</a>
+                </div>
+            <?php else: ?>
+                <div class="club-timeline">
+                    <?php foreach ($clubs as $club): ?>
+                        <?php
+                            $statusKey = clubTimelineStatusClass($club['status'] ?? 'pending');
+                            $roleLabel = clubTimelineRoleLabel($club['member_type'] ?? 'member');
+                            $clubName = $club['group_name'] ?? 'Unnamed Club';
+                            $cluster = $club['cluster'] ?: 'Unknown Cluster';
+                        ?>
+                        <article class="timeline-item">
+                            <span class="timeline-dot <?= h($statusKey) ?>" aria-hidden="true"></span>
+                            <div class="timeline-card">
+                                <div class="timeline-card-top">
+                                    <div>
+                                        <div class="timeline-date">
+                                            <i class="bi bi-calendar-event me-1"></i><?= h(clubTimelineDateLabel($club)) ?>
+                                        </div>
+                                        <h3 class="timeline-title h5">Club Registration Submitted</h3>
+                                    </div>
+                                    <span class="timeline-status <?= h($statusKey) ?>">
+                                        <?= h(ucfirst($statusKey)) ?>
+                                    </span>
+                                </div>
+
+                                <p class="timeline-description">
+                                    You are registered as <?= h($roleLabel) ?> for
+                                    <strong><?= h($clubName) ?></strong>
+                                    under <strong><?= h($cluster) ?></strong>.
+                                </p>
+
+                                <div class="timeline-meta">
+                                    <span class="timeline-pill">
+                                        <i class="bi bi-people"></i><?= h($clubName) ?>
+                                    </span>
+                                    <span class="timeline-pill">
+                                        <i class="bi bi-diagram-3"></i><?= h($cluster) ?>
+                                    </span>
+                                    <span class="timeline-pill">
+                                        <i class="bi bi-person-badge"></i><?= h($roleLabel) ?>
+                                    </span>
+                                    <?php if (!empty($club['focus_area'])): ?>
+                                        <span class="timeline-pill">
+                                            <i class="bi bi-bullseye"></i><?= h($club['focus_area']) ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </section>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

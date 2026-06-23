@@ -52,7 +52,7 @@ function user_by_email($conn, $email) {
                intake, country, gender, area_of_interest, expected_graduation_year
         FROM users
         WHERE role='user'
-        AND LOWER(email)=LOWER(?)
+        AND email COLLATE utf8mb4_unicode_ci = CAST(? AS CHAR CHARACTER SET utf8mb4) COLLATE utf8mb4_unicode_ci
         LIMIT 1
     ");
     $stmt->bind_param('s', $email);
@@ -176,13 +176,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Invalid key person email.';
     }
 
+    if ($key_email === '') {
+        $errors[] = 'Key person email is required.';
+    }
+
+    if ($studentIds['key'] === '') {
+        $errors[] = 'Key person student ID is required.';
+    }
+
+    if ($semesters['key'] === '') {
+        $errors[] = 'Key person current semester is required.';
+    }
+
     if ($deputy_email !== '' && !filter_var($deputy_email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = 'Invalid deputy email.';
     }
 
+    if ($deputy_email === '') {
+        $errors[] = 'Deputy key person email is required.';
+    }
+
+    if ($studentIds['deputy'] === '') {
+        $errors[] = 'Deputy key person student ID is required.';
+    }
+
+    if ($semesters['deputy'] === '') {
+        $errors[] = 'Deputy key person current semester is required.';
+    }
+
     foreach ($memberEmails as $i => $email) {
+        if ($email === '') {
+            $errors[] = "Member {$i} email is required.";
+        }
         if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "Invalid Member {$i} email.";
+        }
+        if ($studentIds[$i] === '') {
+            $errors[] = "Member {$i} student ID is required.";
+        }
+        if ($semesters[$i] === '') {
+            $errors[] = "Member {$i} current semester is required.";
         }
     }
 
@@ -192,6 +225,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $regularMembers = [];
     foreach ($memberEmails as $i => $email) {
         $regularMembers[$i] = $email !== '' ? user_by_email($conn, $email) : null;
+    }
+
+    if ($key_email !== '' && !$key) {
+        $errors[] = 'Key person email must belong to a registered student user.';
+    }
+
+    if ($deputy_email !== '' && !$deputy) {
+        $errors[] = 'Deputy key person email must belong to a registered student user.';
+    }
+
+    foreach ($regularMembers as $i => $member) {
+        if (($memberEmails[$i] ?? '') !== '' && !$member) {
+            $errors[] = "Member {$i} email must belong to a registered student user.";
+        }
     }
 
     $filledEmails = [];
@@ -211,7 +258,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$errors) {
         if ($club_identifier !== '') {
-            $st = $conn->prepare("SELECT 1 FROM clubs WHERE club_identifier = ? LIMIT 1");
+            $st = $conn->prepare("SELECT 1 FROM clubs WHERE club_identifier COLLATE utf8mb4_unicode_ci = CAST(? AS CHAR CHARACTER SET utf8mb4) COLLATE utf8mb4_unicode_ci LIMIT 1");
             $st->bind_param('s', $club_identifier);
             $st->execute();
 
@@ -220,7 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        $st = $conn->prepare("SELECT 1 FROM clubs WHERE LOWER(group_name) = LOWER(?) LIMIT 1");
+        $st = $conn->prepare("SELECT 1 FROM clubs WHERE LOWER(group_name) COLLATE utf8mb4_unicode_ci = LOWER(CAST(? AS CHAR CHARACTER SET utf8mb4)) COLLATE utf8mb4_unicode_ci LIMIT 1");
         $st->bind_param('s', $group_name);
         $st->execute();
 
@@ -240,6 +287,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $deputy_student_id = $studentIds['deputy'] ?: 'UNKNOWN';
 
             $advisorValue = $cluster_advisor ?: 'Unknown';
+            $club_identifier_db = $club_identifier === '' ? null : $club_identifier;
+            $focus_area_db = $focus_area === '' ? null : $focus_area;
 
             if ($hasFocus) {
                 $sql = "
@@ -259,10 +308,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     )
                     VALUES
                     (
-                        NULLIF(?, ''),
                         ?,
                         ?,
-                        NULLIF(?, ''),
+                        ?,
+                        ?,
                         ?,
                         ?,
                         ?,
@@ -276,10 +325,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param(
                     'sssssssssss',
-                    $club_identifier,
+                    $club_identifier_db,
                     $group_name,
                     $cluster,
-                    $focus_area,
+                    $focus_area_db,
                     $advisorValue,
                     $key_name,
                     $key_student_id,
@@ -305,7 +354,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     )
                     VALUES
                     (
-                        NULLIF(?, ''),
+                        ?,
                         ?,
                         ?,
                         ?,
@@ -321,7 +370,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param(
                     'ssssssssss',
-                    $club_identifier,
+                    $club_identifier_db,
                     $group_name,
                     $cluster,
                     $advisorValue,
