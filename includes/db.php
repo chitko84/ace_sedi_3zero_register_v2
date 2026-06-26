@@ -22,3 +22,7 @@ $conn->query("SET collation_connection = 'utf8mb4_unicode_ci'");
 
 require_once __DIR__ . '/default_admin.php';
 ensure_default_admin($conn);
+
+require_once __DIR__ . '/default_local_user.php';
+ensure_default_local_user($conn);
+?>

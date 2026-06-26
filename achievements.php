@@ -12,6 +12,7 @@ include('header.php');
 
 // DB
 include('includes/db.php');
+require_once __DIR__ . '/includes/public_image_paths.php';
 if (!isset($conn) || !$conn) {
     die("Database connection failed");
 }
@@ -117,7 +118,9 @@ if (!empty($achievements)) {
         $phStmt->execute();
         $res = $phStmt->get_result();
         while ($row = $res->fetch_assoc()) {
-            $row['file_path'] = normalize_upload_path($row['file_path']);
+            $rawPath = $row['file_path'] ?? '';
+            $row['file_path'] = public_normalize_upload_path($rawPath, 'achievements');
+            public_debug_image_path($rawPath, $row['file_path']);
             $aid = (int)$row['achievement_id'];
             if (!isset($achievementPhotos[$aid])) $achievementPhotos[$aid] = [];
             $achievementPhotos[$aid][] = $row;

@@ -159,7 +159,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-top: 80px;
+    padding-top: 120px;
 }
 
 .auth-container {
@@ -370,7 +370,7 @@ body {
     }
 
     .main-content {
-        padding-top: 70px;
+        padding-top: 110px;
     }
 }
 
@@ -424,7 +424,7 @@ body {
     }
     .main-content {
         min-height: 100svh;
-        padding: 76px .75rem 1.25rem;
+        padding: 116px .75rem 1.25rem;
     }
     .container {
         padding-left: 0;

@@ -1,7 +1,7 @@
 <?php
 // activities_public.php
 // Public Activities showcase with calendar, search, filters, cards + modal
-// Only shows approved activities with ongoing/completed statuses
+// Only shows approved activities.
 
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
@@ -13,6 +13,7 @@ include('header.php');
 
 // Database connection
 include('includes/db.php');
+require_once __DIR__ . '/includes/public_image_paths.php';
 
 // Check if we have a valid database connection
 if (!isset($conn) || !$conn) {
@@ -38,6 +39,9 @@ function normalize_upload_path(string $p): string {
 // Build filters from query string
 $q        = g('q', '');
 $status   = g('status', 'all'); // all | ongoing | completed
+if (!in_array($status, ['all', 'ongoing', 'completed'], true)) {
+    $status = 'all';
+}
 $year     = g('year', '');
 $month    = g('month', '');     // 1..12
 $day      = g('day', '');       // 1..31
@@ -93,6 +97,7 @@ SELECT
     p.end_date,
     p.status,
     p.created_at,
+    'activity' AS source_type,
     c.group_name AS club_name,
     c.cluster
 FROM projects p
@@ -117,10 +122,12 @@ if ($stmt) {
     $stmt->close();
 }
 
-// Get activity photos for each activity
+// Get activity photos for each activity. This page must not load event_photos.
 $activityPhotos = [];
 if (!empty($activities)) {
-    $activityIds = array_column($activities, 'id');
+    $activityIds = array_values(array_map('intval', array_column($activities, 'id')));
+
+    if (!empty($activityIds)) {
     $placeholders = str_repeat('?,', count($activityIds) - 1) . '?';
 
     $photosSql = "SELECT activity_id, file_path, original_name FROM activity_photos WHERE activity_id IN ($placeholders) ORDER BY id ASC";
@@ -133,8 +140,17 @@ if (!empty($activities)) {
 
         while ($photo = $photosResult->fetch_assoc()) {
             // ✅ Normalize path here to strip any ../ and force uploads/
-            $photo['file_path'] = normalize_upload_path($photo['file_path']);
-            $activityId = (int)$photo['activity_id'];
+            $rawPath = $photo['file_path'] ?? '';
+            $normalizedPath = public_normalize_upload_path($rawPath, 'activities');
+            if (
+                $normalizedPath === null ||
+                (!preg_match('~^https?://~i', $normalizedPath) && strpos($normalizedPath, 'uploads/activities/') !== 0)
+            ) {
+                continue;
+            }
+            $photo['file_path'] = $normalizedPath;
+            public_debug_image_path($rawPath, $photo['file_path']);
+            $activityId = 'activity:' . (int)$photo['activity_id'];
             if (!isset($activityPhotos[$activityId])) {
                 $activityPhotos[$activityId] = [];
             }
@@ -142,6 +158,8 @@ if (!empty($activities)) {
         }
         $photosStmt->close();
     }
+    }
+
 }
 
 // Second query for calendar: counts by date in visible month - Only approved activities
@@ -535,7 +553,8 @@ function fmtDateRange($start, $end) {
             $objectivesShort = $act['objectives'] ? strip_tags($act['objectives']) : '';
 
             // Photos (already normalized server-side)
-            $photos = $activityPhotos[$act['id']] ?? [];
+            $photoKey = ($act['source_type'] ?? 'activity') . ':' . (int)$act['id'];
+            $photos = $activityPhotos[$photoKey] ?? [];
             $thumbSrc = $photos[0]['file_path'] ?? null;
 
             // Cluster badge
@@ -555,6 +574,7 @@ function fmtDateRange($start, $end) {
         ?>
           <article class="activity-card"
                    data-id="<?= (int)$act['id'] ?>"
+                   data-source="<?= htmlspecialchars($act['source_type'] ?? 'activity') ?>"
                    data-title="<?= htmlspecialchars($act['activity_name']) ?>"
                    data-club="<?= htmlspecialchars($clubName) ?>"
                    data-status="<?= htmlspecialchars($act['status']) ?>"
